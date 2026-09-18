@@ -24,7 +24,7 @@ const free = (
 export const FREE_BACKGROUND_IDS = ["soft-ivory"] as const;
 
 const FREE_BACKGROUNDS: Background[] = [
-  free("soft-ivory", "Soft Ivory", "Mjuk elfenben", "dark", "#f4ede2", "linear-gradient(165deg,#fbf7f0 0%,#eee2d2 100%)"),
+  free("soft-ivory", "Soft Beige", "Mjuk beige", "dark", "#f4ede2", "linear-gradient(165deg,#f7f0e4 0%,#e8dbc6 100%)"),
   free("powder-pink", "Powder Pink", "Puderrosa", "dark", "#ead2d7", "radial-gradient(circle at 50% 18%,#fff7f7 0%,transparent 54%),linear-gradient(165deg,#f6e5e7,#dbb8c0)"),
   free("quiet-sage", "Quiet Sage", "Lugn salvia", "dark", "#bac3ae", "radial-gradient(circle at 50% 12%,rgba(255,255,255,.5),transparent 55%),linear-gradient(165deg,#d5dbc9,#9eaa91)"),
   free("deep-garnet", "Deep Garnet", "Djup granat", "light", "#52131f", "radial-gradient(circle at 50% 15%,rgba(255,213,185,.18),transparent 48%),linear-gradient(165deg,#76253a,#310913)"),

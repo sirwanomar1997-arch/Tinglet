@@ -68,6 +68,7 @@ import bellImage67 from "@/assets/bells/exclusive-07.png";
 import bellImage68 from "@/assets/bells/exclusive-08.png";
 import bellImage69 from "@/assets/bells/exclusive-09.png";
 import bellImage70 from "@/assets/bells/exclusive-10.png";
+import bellImage71 from "@/assets/bells/exclusive-11.png";
 
 export const BELL_IMAGES: Record<string, string> = {
   "free-01": bellImage1,
@@ -140,4 +141,5 @@ export const BELL_IMAGES: Record<string, string> = {
   "exclusive-08": bellImage68,
   "exclusive-09": bellImage69,
   "exclusive-10": bellImage70,
+  "exclusive-11": bellImage71,
 };
