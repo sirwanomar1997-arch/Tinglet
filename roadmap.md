@@ -4,4 +4,4 @@
 - [x] Skapa visuell Premium-annons
 - [x] Öppna alla premiumval i en gemensam katalog
 - [x] Behåll ett köp på 39 kr för allt
-- [ ] Verifiera mobilflödet
+- [x] Verifiera mobilflödet

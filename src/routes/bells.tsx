@@ -68,12 +68,12 @@ function BackgroundCard({ item, locked }: { item: Background; locked: boolean })
 
 function SelectedBell() {
   const { bell, lang } = useAppState();
-  return <div className="space-y-2.5"><h2 className="ml-1 font-serif text-xl text-foreground">{useAppState().t("handBells")}</h2><div className="relative aspect-square overflow-hidden rounded-xl border border-primary/25 bg-card/90 p-2 shadow-[0_8px_24px_color-mix(in_oklab,var(--foreground)_8%,transparent)]"><StatusBadge selected locked={false} /><img src={bell.image} alt="" width={1024} height={1024} className="size-full object-contain drop-shadow-[0_7px_6px_color-mix(in_oklab,var(--foreground)_12%,transparent)]" /><span className="absolute inset-x-0 bottom-0 truncate bg-card/95 px-2 py-2 text-center font-serif text-[13px] text-card-foreground/80">{bell.name[lang]}</span></div></div>;
+  return <div className="space-y-2.5"><h2 className="ml-1 font-serif text-xl text-foreground">{useAppState().t("handBells")}</h2><div className="relative flex aspect-square flex-col overflow-hidden rounded-xl border border-primary/25 bg-card/90 p-2 pb-0 shadow-[0_8px_24px_color-mix(in_oklab,var(--foreground)_8%,transparent)]"><StatusBadge selected locked={false} /><img src={bell.image} alt="" width={1024} height={1024} className="min-h-0 flex-1 object-contain drop-shadow-[0_7px_6px_color-mix(in_oklab,var(--foreground)_12%,transparent)]" /><span className="shrink-0 truncate bg-card/95 px-2 py-2 text-center font-serif text-[13px] text-card-foreground/80">{bell.name[lang]}</span></div></div>;
 }
 
 function SelectedBackground() {
   const { background, lang, t } = useAppState();
-  return <div className="space-y-2.5"><h2 className="ml-1 font-serif text-xl text-foreground">{t("backgrounds")}</h2><div className="relative aspect-square overflow-hidden rounded-xl border border-primary/25 bg-card/90 shadow-[0_8px_24px_color-mix(in_oklab,var(--foreground)_8%,transparent)]"><StatusBadge selected locked={false} /><BackgroundSwatch background={background} className="size-full" /><span className="absolute inset-x-0 bottom-0 truncate bg-card/95 px-2 py-2 text-center font-serif text-[13px] text-card-foreground/80">{background.name[lang]}</span></div></div>;
+  return <div className="space-y-2.5"><h2 className="ml-1 font-serif text-xl text-foreground">{t("backgrounds")}</h2><div className="relative flex aspect-square flex-col overflow-hidden rounded-xl border border-primary/25 bg-card/90 shadow-[0_8px_24px_color-mix(in_oklab,var(--foreground)_8%,transparent)]"><StatusBadge selected locked={false} /><BackgroundSwatch background={background} className="min-h-0 flex-1" /><span className="shrink-0 truncate bg-card/95 px-2 py-2 text-center font-serif text-[13px] text-card-foreground/80">{background.name[lang]}</span></div></div>;
 }
 
 function PremiumAd({ onOpen }: { onOpen: () => void }) {
