@@ -8,7 +8,7 @@
 
 ## Riktig app (en sak i taget)
 - [x] App-ikon av guldklockan med rosa rosett (1024 App Store, 512 Play, favicon, apple-touch)
-- [ ] 7 butiksbilder med olika klockor och bakgrunder
+- [x] 7 butiksbilder med olika klockor och bakgrunder
 - [ ] Butikstext att kopiera in (namn, beskrivning, nyckelord, integritet)
 - [ ] Riktiga köp: App Store / Google Play (39 kr, utbetalning till ägaren)
 - [ ] GitHub-sync och native-paketering för iOS/Android
