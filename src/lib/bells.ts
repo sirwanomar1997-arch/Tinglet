@@ -90,7 +90,7 @@ export const BELLS:Bell[]=[
  makeBell("halloween-02","halloween","Pumpkin Filigree","Pumpafiligran",56),
  makeBell("halloween-03","halloween","Violet Moon","Violett måne",57),
  makeBell("halloween-04","halloween","Lantern Glass","Lyktglas",58),
- makeBell("halloween-05","halloween","Raven Noir","Korpnoir",59),
+ makeBell("halloween-05","halloween","Pearl Ghost","Pärlspöket",59),
  makeBell("exclusive-01","exclusive","Imperial Ruby","Imperialrubin",60),
  makeBell("exclusive-02","exclusive","Diamond Crystal","Diamantkristall",61),
  makeBell("exclusive-03","exclusive","Pearl Crown","Pärlkrona",62),

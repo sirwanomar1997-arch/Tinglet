@@ -75,25 +75,27 @@ export function ringBell(tone: Tone, volume = 1, intensity = 0.7): void {
   const now = context.currentTime + 0.005;
   const bus = context.createGain();
   const force = Math.max(0.14, Math.min(1, intensity));
-  bus.gain.value = Math.max(0, Math.min(1, volume)) * (0.28 + force * 0.42);
+  bus.gain.value = Math.max(0, Math.min(1, volume)) * (0.2 + force * 0.34);
   const warmth = context.createBiquadFilter();
   warmth.type = "lowpass";
-  warmth.frequency.value = 4200 + force * 1800;
-  warmth.Q.value = 0.3;
+  warmth.frequency.value = 3100 + force * 1200;
+  warmth.Q.value = 0.42;
   bus.disconnect();
   bus.connect(warmth);
   warmth.connect(master);
 
-  strikeNoise(context, bus, now, 0.04 + force * 0.055);
+  strikeNoise(context, bus, now, 0.018 + force * 0.025);
 
-  tone.partials.forEach((ratio, index) => {
-    const handBellBase = Math.max(540, Math.min(920, tone.base * 1.16));
-    const freq = handBellBase * ratio;
+  tone.partials.slice(0, 6).forEach((ratio, index) => {
+    // Every visual design uses the same carefully voiced, soft hand-bell timbre.
+    const handBellBase = 784;
+    const softPartials = [1, 2.01, 2.58, 3.44, 4.09, 5.2];
+    const freq = handBellBase * (softPartials[index] ?? ratio);
     if (freq > 16000) return;
 
     const partialGain =
-      (1 / (1 + index * 1.75)) * (index === 0 ? 0.5 : 0.2 + tone.brightness * 0.34) * force;
-    const decay = Math.min(3.8, tone.decay * 0.48) * (index === 0 ? 1 : Math.pow(0.62, index) + 0.07);
+      (1 / (1 + index * 2.15)) * (index === 0 ? 0.52 : 0.25) * force;
+    const decay = 1.9 * (index === 0 ? 1 : Math.pow(0.58, index) + 0.08);
 
     const osc = context.createOscillator();
     osc.type = "sine";
