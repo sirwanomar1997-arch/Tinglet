@@ -9,3 +9,4 @@
 - [x] Match the newly approved home bell size exactly while keeping the rendered bell crisp and free of blur.
 - [ ] Match every bell crop to the approved pink bell and remove all pale background remnants from every transparent asset.
 - [ ] Replace the deluxe background collection with richer, varied, premium-quality visual directions.
+- [ ] Match the newly uploaded hand-bell sound reference and make playback convincingly loud while remaining clean.
