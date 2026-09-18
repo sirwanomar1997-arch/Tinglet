@@ -15,12 +15,12 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "A premium hand bell for your phone. Shake or tap to ring a rich, realistic bell, and choose from elegant bells and backgrounds.",
+          "A premium hand bell for your phone. Shake naturally to play a soft, realistic hand-bell tone.",
       },
       { property: "og:title", content: "Elegant Hand Bell" },
       {
         property: "og:description",
-        content: "Shake or tap to ring a beautifully crafted hand bell.",
+        content: "Shake naturally to ring a beautifully crafted hand bell.",
       },
     ],
   }),
@@ -33,54 +33,40 @@ function HomePage() {
   const [clapper, setClapper] = useState(0);
   const [glow, setGlow] = useState(0);
 
-  const ring = useCallback(() => {
+  const ring = useCallback(({ intensity, x }: { intensity: number; x: number }) => {
     void unlockAudio();
-    ringBell(bell.tone, volume);
-    if (haptics) vibrate([10, 22, 8]);
+    ringBell(bell.tone, volume, intensity);
+    if (haptics) vibrate(Math.round(5 + intensity * 8));
 
     setGlow((g) => g + 1);
-    setClapper(7);
-    window.setTimeout(() => setClapper(-5), 150);
-    window.setTimeout(() => setClapper(3), 320);
-    window.setTimeout(() => setClapper(0), 520);
+    const direction = x >= 0 ? 1 : -1;
+    setClapper(direction * (4 + intensity * 9));
+    window.setTimeout(() => setClapper(-direction * (2 + intensity * 5)), 95);
+    window.setTimeout(() => setClapper(0), 220);
 
     void controls.start({
-      rotate: [0, 11, -9, 6, -4, 2, 0],
-      transition: { duration: 1.25, ease: "easeOut" },
+      rotate: [direction * intensity * 13, -direction * intensity * 8, direction * intensity * 3, 0],
+      x: [direction * intensity * 9, -direction * intensity * 4, 0],
+      transition: { duration: 0.58, ease: "easeOut" },
     });
   }, [bell.tone, controls, haptics, volume]);
 
   const { permission, requestPermission } = useShake(ring, shakeEnabled);
   const needsPermission = shakeEnabled && permission === "needs-permission";
-  const light = background.tone === "light";
 
   return (
-    <main className="relative flex min-h-screen flex-col px-5 pb-32 pt-[max(1.25rem,env(safe-area-inset-top))]">
-      <header className="flex items-start justify-between">
-        <div>
-          <p
-            className={`text-[10px] uppercase tracking-[0.34em] ${light ? "text-white/45" : "text-black/40"}`}
-          >
-            {t("currentBell")}
-          </p>
-          <h1
-            className={`font-serif text-2xl leading-tight ${light ? "text-white" : "text-black/80"}`}
-          >
-            {bell.name[lang]}
-          </h1>
-        </div>
-        <SettingsSheet />
+    <main className="relative flex min-h-screen flex-col overflow-hidden px-5 pb-24 pt-[max(1.25rem,env(safe-area-inset-top))]">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_50%_42%,color-mix(in_oklab,var(--primary)_14%,transparent),transparent_48%)]" />
+      <header className="relative z-10 flex justify-end">
+        <SettingsSheet onOpen={() => { void unlockAudio(); if (needsPermission) void requestPermission(); }} />
       </header>
 
-      <div className="flex flex-1 flex-col items-center justify-center">
-        <button
-          onClick={ring}
-          aria-label={t("tapToRing")}
-          className="relative flex w-full max-w-[22rem] items-center justify-center outline-none"
-        >
+      <div className="relative flex flex-1 flex-col items-center justify-center">
+        <div className="pointer-events-none absolute left-1/2 top-1/2 h-[62%] w-[76%] -translate-x-1/2 -translate-y-1/2 rounded-[50%] border border-foreground/10 bg-background/10 shadow-[inset_0_1px_0_color-mix(in_oklab,var(--foreground)_12%,transparent),0_38px_90px_color-mix(in_oklab,var(--background)_72%,transparent)] backdrop-blur-[2px]" />
+        <div className="relative flex w-full max-w-[25rem] items-center justify-center" aria-hidden="true">
           <motion.span
             key={glow}
-            className="absolute size-[68%] rounded-full"
+            className="absolute size-[72%] rounded-full blur-xl"
             style={{
               background: `radial-gradient(circle, ${bell.finish.accent}55 0%, transparent 70%)`,
             }}
@@ -92,27 +78,12 @@ function HomePage() {
             animate={controls}
             style={{ transformOrigin: "50% 12%" }}
             whileTap={{ scale: 0.97 }}
-            className="w-full drop-shadow-[0_28px_45px_rgba(0,0,0,0.35)]"
+            className="w-full drop-shadow-[0_36px_34px_color-mix(in_oklab,var(--background)_65%,transparent)]"
           >
             <BellArt bell={bell} clapperOffset={clapper} className="h-auto w-full" />
           </motion.div>
-        </button>
-      </div>
-
-      <div className="flex flex-col items-center gap-3 pb-4">
-        {needsPermission ? (
-          <button
-            onClick={() => void requestPermission()}
-            className="rounded-full border border-[color:var(--gilt)]/50 bg-black/35 px-5 py-2.5 text-sm text-[color:var(--gilt)] backdrop-blur-md"
-          >
-            {t("enableShake")}
-          </button>
-        ) : null}
-        <p
-          className={`text-[11px] uppercase tracking-[0.3em] ${light ? "text-white/45" : "text-black/40"}`}
-        >
-          {shakeEnabled && permission === "granted" ? t("tapOrShake") : t("tapToRing")}
-        </p>
+        </div>
+        <div className="pointer-events-none absolute bottom-[12%] h-8 w-52 rounded-full bg-background/55 blur-xl" />
       </div>
     </main>
   );

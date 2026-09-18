@@ -6,13 +6,20 @@ type MotionEventCtor = {
   requestPermission?: () => Promise<"granted" | "denied">;
 };
 
+export type ShakeImpulse = {
+  intensity: number;
+  x: number;
+  y: number;
+};
+
 /**
  * Detects a phone shake via the device motion sensor.
  * On iOS, permission must be requested from a user gesture.
  */
-export function useShake(onShake: () => void, enabled: boolean) {
+export function useShake(onShake: (impulse: ShakeImpulse) => void, enabled: boolean) {
   const [permission, setPermission] = useState<PermissionState>("unsupported");
   const lastRing = useRef(0);
+  const previous = useRef({ x: 0, y: 0, z: 0 });
   const handler = useRef(onShake);
   handler.current = onShake;
 
@@ -47,13 +54,20 @@ export function useShake(onShake: () => void, enabled: boolean) {
     const onMotion = (event: DeviceMotionEvent) => {
       const a = event.accelerationIncludingGravity ?? event.acceleration;
       if (!a) return;
-      const magnitude = Math.hypot(a.x ?? 0, a.y ?? 0, a.z ?? 0);
-      // ~9.8 at rest when gravity is included; 20+ is a deliberate shake.
-      if (magnitude < 22) return;
-      const now = Date.now();
-      if (now - lastRing.current < 650) return;
+      const x = a.x ?? 0;
+      const y = a.y ?? 0;
+      const z = a.z ?? 0;
+      const change = Math.hypot(x - previous.current.x, y - previous.current.y, z - previous.current.z);
+      previous.current = { x, y, z };
+      if (change < 7.5) return;
+      const now = performance.now();
+      if (now - lastRing.current < 105) return;
       lastRing.current = now;
-      handler.current();
+      handler.current({
+        intensity: Math.min(1, Math.max(0.18, (change - 6) / 22)),
+        x: Math.max(-1, Math.min(1, x / 16)),
+        y: Math.max(-1, Math.min(1, y / 16)),
+      });
     };
 
     window.addEventListener("devicemotion", onMotion);

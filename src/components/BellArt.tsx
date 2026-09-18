@@ -265,6 +265,8 @@ export function BellArt({
   const sheen = `sheen-${uid}`;
   const mouth = `mouth-${uid}`;
   const clip = `clip-${uid}`;
+  const metal = `metal-${uid}`;
+  const depth = `depth-${uid}`;
   const { finish, shape } = bell;
   const [rimY, rimHalf] = RIM[shape];
   const path = BODY[shape];
@@ -280,13 +282,24 @@ export function BellArt({
     >
       <defs>
         <linearGradient id={body} x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0%" stopColor={finish.stops[2]} />
-          <stop offset="14%" stopColor={finish.stops[1]} />
-          <stop offset="34%" stopColor={finish.stops[0]} />
-          <stop offset="52%" stopColor={finish.stops[1]} />
-          <stop offset="78%" stopColor={finish.stops[2]} />
+          <stop offset="0%" stopColor={finish.stops[3]} />
+          <stop offset="9%" stopColor={finish.stops[2]} />
+          <stop offset="24%" stopColor={finish.stops[1]} />
+          <stop offset="38%" stopColor={finish.stops[0]} />
+          <stop offset="48%" stopColor={finish.highlight} />
+          <stop offset="58%" stopColor={finish.stops[1]} />
+          <stop offset="79%" stopColor={finish.stops[2]} />
           <stop offset="100%" stopColor={finish.stops[3]} />
         </linearGradient>
+        <linearGradient id={metal} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor={finish.highlight} stopOpacity="0.7" />
+          <stop offset="28%" stopColor={finish.accent} stopOpacity="0.08" />
+          <stop offset="72%" stopColor={finish.shadow} stopOpacity="0.2" />
+          <stop offset="100%" stopColor={finish.highlight} stopOpacity="0.34" />
+        </linearGradient>
+        <filter id={depth} x="-40%" y="-35%" width="180%" height="190%">
+          <feDropShadow dx="0" dy="12" stdDeviation="10" floodColor={finish.shadow} floodOpacity="0.52" />
+        </filter>
         <radialGradient id={sheen} cx="0.34" cy="0.22" r="0.5">
           <stop offset="0%" stopColor={finish.highlight} stopOpacity="0.85" />
           <stop offset="100%" stopColor={finish.highlight} stopOpacity="0" />
@@ -303,13 +316,9 @@ export function BellArt({
       {/* soft contact shadow */}
       <ellipse cx={120} cy={rimY + 46} rx={rimHalf + 14} ry={12} fill="#000" opacity={0.18} />
 
-      <Handle
-        kind={bell.handle}
-        accent={finish.accent}
-        light={finish.highlight}
-        dark={finish.stops[3]}
-        topY={topY}
-      />
+      <g filter={`url(#${depth})`}>
+        <Handle kind={bell.handle} accent={finish.accent} light={finish.highlight} dark={finish.stops[3]} topY={topY} />
+      </g>
 
       {/* clapper */}
       <g transform={`translate(${clapperOffset} 0)`}>
@@ -324,10 +333,12 @@ export function BellArt({
       </g>
 
       {/* body */}
-      <path d={path} fill={`url(#${body})`} />
+      <path d={path} fill={`url(#${body})`} filter={`url(#${depth})`} />
+      <path d={path} fill={`url(#${metal})`} />
 
       <g clipPath={`url(#${clip})`}>
         <ellipse cx={92} cy={topY + 56} rx={44} ry={70} fill={`url(#${sheen})`} />
+        <path d={`M72 ${topY + 24} C86 ${topY + 4} 100 ${topY + 2} 108 ${topY + 10}`} stroke={finish.highlight} strokeWidth={2} strokeOpacity={0.55} fill="none" />
         <path
           d={`M150 ${topY} C158 ${topY + 60} 168 ${topY + 110} 186 ${rimY}`}
           stroke={finish.stops[3]}
@@ -376,7 +387,7 @@ export function BellArt({
         ry={13}
         fill={`url(#${mouth})`}
         stroke={finish.stops[1]}
-        strokeWidth={3}
+        strokeWidth={5}
       />
       <ellipse
         cx={120}
@@ -390,8 +401,8 @@ export function BellArt({
         d={`M${120 - rimHalf} ${rimY} A ${rimHalf} 13 0 0 0 ${120 + rimHalf} ${rimY}`}
         fill="none"
         stroke={finish.stops[0]}
-        strokeWidth={3}
-        opacity={0.7}
+        strokeWidth={4}
+        opacity={0.9}
       />
     </svg>
   );
