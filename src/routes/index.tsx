@@ -2,13 +2,14 @@ import { createFileRoute } from "@tanstack/react-router";
 import { motion, useAnimationControls } from "motion/react";
 import { useCallback, useState } from "react";
 
-import { BellArt } from "@/components/BellArt";
+import { BellScene3D, type BellImpulse } from "@/components/BellScene3D";
 import { SettingsSheet } from "@/components/SettingsSheet";
 import { ringBell, unlockAudio, vibrate } from "@/lib/bell-audio";
 import { useAppState } from "@/lib/app-state";
 import { useShake } from "@/lib/use-shake";
 
 export const Route = createFileRoute("/")({
+  ssr: false,
   head: () => ({
     meta: [
       { title: "Elegant Hand Bell — Ring a beautiful bell" },
@@ -29,9 +30,8 @@ export const Route = createFileRoute("/")({
 
 function HomePage() {
   const { bell, volume, haptics, shakeEnabled } = useAppState();
-  const controls = useAnimationControls();
-  const [clapper, setClapper] = useState(0);
   const [glow, setGlow] = useState(0);
+  const [impulse, setImpulse] = useState<BellImpulse>({ id: 0, intensity: 0, direction: 1 });
 
   const ring = useCallback(({ intensity, x }: { intensity: number; x: number }) => {
     void unlockAudio();
@@ -40,16 +40,8 @@ function HomePage() {
 
     setGlow((g) => g + 1);
     const direction = x >= 0 ? 1 : -1;
-    setClapper(direction * (4 + intensity * 9));
-    window.setTimeout(() => setClapper(-direction * (2 + intensity * 5)), 95);
-    window.setTimeout(() => setClapper(0), 220);
-
-    void controls.start({
-      rotate: [direction * intensity * 13, -direction * intensity * 8, direction * intensity * 3, 0],
-      x: [direction * intensity * 9, -direction * intensity * 4, 0],
-      transition: { duration: 0.58, ease: "easeOut" },
-    });
-  }, [bell.tone, controls, haptics, volume]);
+    setImpulse((current) => ({ id: current.id + 1, intensity, direction }));
+  }, [bell.tone, haptics, volume]);
 
   const { permission, requestPermission } = useShake(ring, shakeEnabled);
   const needsPermission = shakeEnabled && permission === "needs-permission";
@@ -62,8 +54,8 @@ function HomePage() {
       </header>
 
       <div className="relative flex flex-1 flex-col items-center justify-center">
-        <div className="pointer-events-none absolute left-1/2 top-1/2 h-[62%] w-[76%] -translate-x-1/2 -translate-y-1/2 rounded-[50%] border border-foreground/10 bg-background/10 shadow-[inset_0_1px_0_color-mix(in_oklab,var(--foreground)_12%,transparent),0_38px_90px_color-mix(in_oklab,var(--background)_72%,transparent)] backdrop-blur-[2px]" />
-        <div className="relative flex w-full max-w-[25rem] items-center justify-center" aria-hidden="true">
+        <div className="pointer-events-none absolute left-1/2 top-1/2 h-[68%] w-[84%] -translate-x-1/2 -translate-y-1/2 rounded-[50%] border border-foreground/10 bg-background/10 shadow-[inset_0_1px_0_color-mix(in_oklab,var(--foreground)_12%,transparent),0_38px_90px_color-mix(in_oklab,var(--background)_72%,transparent)] backdrop-blur-[2px]" />
+        <div className="relative h-[min(70vh,42rem)] w-full max-w-[30rem]" aria-hidden="true">
           <motion.span
             key={glow}
             className="absolute size-[72%] rounded-full blur-xl"
@@ -74,13 +66,7 @@ function HomePage() {
             animate={{ opacity: 0, scale: 1.35 }}
             transition={{ duration: 1.1, ease: "easeOut" }}
           />
-          <motion.div
-            animate={controls}
-            style={{ transformOrigin: "50% 12%" }}
-            className="w-full drop-shadow-[0_36px_34px_color-mix(in_oklab,var(--background)_65%,transparent)]"
-          >
-            <BellArt bell={bell} clapperOffset={clapper} className="h-auto w-full" />
-          </motion.div>
+          <BellScene3D bell={bell} impulse={impulse} />
         </div>
         <div className="pointer-events-none absolute bottom-[12%] h-8 w-52 rounded-full bg-background/55 blur-xl" />
       </div>
