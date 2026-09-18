@@ -42,26 +42,26 @@ function BellCard({ bell, locked }: { bell: Bell; locked: boolean }) {
     <motion.button
       onClick={choose}
       whileTap={{ scale: locked ? 1 : 0.97 }}
-      className={`relative flex flex-col items-center gap-2 rounded-3xl border p-3 pt-4 text-center transition-colors ${
+      className={`relative flex flex-col items-center gap-2 overflow-hidden rounded-xl border p-3 pt-4 text-center shadow-[0_12px_28px_color-mix(in_oklab,var(--foreground)_9%,transparent)] transition-colors ${
         selected
-          ? "border-[color:var(--gilt)]/60 bg-white/10"
-          : "border-white/10 bg-white/[0.04] hover:bg-white/[0.07]"
+          ? "border-primary/55 bg-card"
+          : "border-border bg-card/74 hover:bg-card"
       }`}
     >
       {selected && (
-        <span className="absolute right-2.5 top-2.5 rounded-full bg-[color:var(--gilt)] p-1 text-black">
+          <span className="absolute right-2.5 top-2.5 rounded-full bg-primary p-1 text-primary-foreground">
           <Check className="size-3" strokeWidth={3} />
         </span>
       )}
       {locked && (
-        <span className="absolute right-2.5 top-2.5 rounded-full bg-black/55 p-1.5 text-white/70">
+        <span className="absolute right-2.5 top-2.5 rounded-full bg-foreground/55 p-1.5 text-background/80">
           <Lock className="size-3" strokeWidth={2} />
         </span>
       )}
       <div className={locked ? "opacity-45 blur-[1px]" : ""}>
         <BellArt bell={bell} className="h-28 w-auto" />
       </div>
-      <span className="text-[13px] text-white/80">{bell.name[lang]}</span>
+      <span className="font-serif text-[15px] text-foreground/80">{bell.name[lang]}</span>
     </motion.button>
   );
 }
@@ -71,10 +71,10 @@ function BellsPage() {
 
   return (
     <main className="min-h-screen px-5 pb-32 pt-[max(1.5rem,env(safe-area-inset-top))]">
-      <div className="pointer-events-none fixed inset-0 -z-10 bg-[#0d0e10]/82 backdrop-blur-2xl" />
+      <div className="pointer-events-none fixed inset-0 -z-10 bg-background/92 backdrop-blur-2xl" />
       <header className="mb-7">
-        <h1 className="font-serif text-3xl text-white">{t("chooseBell")}</h1>
-        <p className="mt-1.5 text-sm text-white/50">{t("chooseBellSub")}</p>
+        <h1 className="font-serif text-3xl text-foreground">{t("chooseBell")}</h1>
+        <p className="mt-1.5 text-sm text-muted-foreground">{t("chooseBellSub")}</p>
       </header>
 
       <div className="space-y-9">
@@ -87,8 +87,8 @@ function BellsPage() {
             <section key={pack.id}>
               <div className="mb-3 flex items-center justify-between gap-3">
                 <div>
-                  <h2 className="font-serif text-xl text-white/90">{pack.name[lang]}</h2>
-                  <p className="text-[11px] uppercase tracking-[0.22em] text-white/40">
+                  <h2 className="font-serif text-xl text-foreground/90">{pack.name[lang]}</h2>
+                  <p className="text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
                     {pack.premium
                       ? unlocked
                         ? t("unlocked")
@@ -102,7 +102,7 @@ function BellsPage() {
                       unlockPack(pack.id);
                       if (haptics) vibrate([8, 30, 8]);
                     }}
-                    className="flex shrink-0 items-center gap-1.5 rounded-full border border-[color:var(--gilt)]/50 bg-[color:var(--gilt)]/12 px-3.5 py-2 text-xs text-[color:var(--gilt)]"
+                    className="flex shrink-0 items-center gap-1.5 rounded-full border border-primary/45 bg-primary/10 px-3.5 py-2 text-xs text-primary"
                   >
                     <Sparkles className="size-3.5" strokeWidth={1.8} />
                     {t("unlockPack")}

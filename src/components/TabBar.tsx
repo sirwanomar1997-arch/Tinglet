@@ -11,7 +11,7 @@ export function TabBar() {
   ] as const;
 
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-40 flex justify-center border-t border-border bg-background/75 px-7 pb-[max(1rem,env(safe-area-inset-bottom))] pt-4 backdrop-blur-2xl">
+    <nav className="fixed inset-x-0 bottom-0 z-40 flex justify-center border-t border-border bg-card/92 px-7 pb-[max(1rem,env(safe-area-inset-bottom))] pt-4 shadow-[0_-12px_40px_color-mix(in_oklab,var(--foreground)_8%,transparent)] backdrop-blur-2xl">
       <div className="flex w-full max-w-sm items-center justify-between">
         {items.map(({ to, label }) => (
           <Link
