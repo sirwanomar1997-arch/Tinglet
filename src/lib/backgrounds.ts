@@ -292,6 +292,7 @@ export const FREE_BACKGROUND_IDS = [
   "frosted-lilac",
   "navy",
   "charcoal",
+  "moonlit-silk",
 ] as const;
 
 const DELUXE_BACKGROUNDS: Background[] = [
