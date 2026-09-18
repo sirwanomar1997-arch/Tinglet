@@ -21,13 +21,7 @@ const free = (
   image: string,
 ): Background => ({ id, name: { en, sv }, group: "minimal", tone, color, image });
 
-export const FREE_BACKGROUND_IDS = [
-  "soft-ivory",
-  "powder-pink",
-  "quiet-sage",
-  "deep-garnet",
-  "dark-emerald",
-] as const;
+export const FREE_BACKGROUND_IDS = ["soft-ivory"] as const;
 
 const FREE_BACKGROUNDS: Background[] = [
   free("soft-ivory", "Soft Ivory", "Mjuk elfenben", "dark", "#f4ede2", "linear-gradient(165deg,#fbf7f0 0%,#eee2d2 100%)"),

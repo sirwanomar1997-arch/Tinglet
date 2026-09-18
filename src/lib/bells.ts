@@ -104,7 +104,7 @@ export const BELLS:Bell[]=[
 ];
 export const DEFAULT_BELL:Bell=BELLS[0]!;
 export const DEFAULT_BELL_ID=DEFAULT_BELL.id;
-export const FREE_BELL_IDS = ["free-01", "free-02", "free-03", "free-04", "free-05"] as const;
+export const FREE_BELL_IDS = ["free-01"] as const;
 export const PREMIUM_PACK_IDS:PackId[]=["christmas","spring","autumn","halloween","exclusive"];
 export function isPremiumBell(id:string):boolean{return !(FREE_BELL_IDS as readonly string[]).includes(id)}
 export function getBell(id:string):Bell{return BELLS.find((bell)=>bell.id===id)??DEFAULT_BELL}
