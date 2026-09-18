@@ -41,7 +41,7 @@ const dict = {
   freeForNow: { en: "One purchase", sv: "Ett köp" },
   freeCollection: { en: "Free bell", sv: "Gratis klocka" },
   premiumCollection: { en: "Premium bells", sv: "Premiumklockor" },
-  premiumCollectionSub: { en: "69 bells · one purchase · SEK 39", sv: "69 klockor · ett köp · 39 kr" },
+  premiumCollectionSub: { en: "70 bells · one purchase · SEK 39", sv: "70 klockor · ett köp · 39 kr" },
   viewCollection: { en: "View collection", sv: "Visa samlingen" },
   closeCollection: { en: "Back to collections", sv: "Tillbaka till samlingar" },
   freeBackgrounds: { en: "Free background", sv: "Gratis bakgrund" },

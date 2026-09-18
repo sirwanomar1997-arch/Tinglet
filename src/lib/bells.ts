@@ -31,7 +31,7 @@ const partials=[1,2.02,2.68,3.47,4.16,5.43,6.79,8.21];
 const makeBell=(id:string,pack:PackId,en:string,sv:string,index:number):Bell=>({id,pack,name:{en,sv},shape:shapes[index%shapes.length]??"classic",handle:handles[index%handles.length]??"loop",decoration:pack==="classic"?"none":pack==="christmas"?"holly":pack==="spring"?"flower":pack==="autumn"?"leaf":pack==="halloween"?"web":"crown",band:index%2===0,finish:finishes[index%finishes.length]??finishes[0]!,tone:{base:560+(index%10)*25,partials,decay:4.2+(index%5)*.28,brightness:.68+(index%4)*.07},image:BELL_IMAGES[id]??""});
 
 export const BELLS:Bell[]=[
- makeBell("free-01","classic","Rosette Gold","Rosettguld",0),
+ makeBell("free-01","classic","Classic Gold","Klassiskt guld",0),
  makeBell("free-02","classic","Garden Porcelain","Trädgårdsporslin",1),
  makeBell("free-03","classic","Heart Bronze","Hjärtbrons",2),
  makeBell("free-04","classic","Crystal Blossom","Kristallblomma",3),
@@ -101,6 +101,7 @@ export const BELLS:Bell[]=[
  makeBell("exclusive-08","exclusive","Magnolia Jewel","Magnoliasmycke",67),
  makeBell("exclusive-09","exclusive","Golden Flakes","Gyllene flingor",68),
  makeBell("exclusive-10","exclusive","Cameo Velvet","Kameosammet",69),
+ makeBell("exclusive-11","exclusive","Rosette Gold","Rosettguld",70),
 ];
 export const DEFAULT_BELL:Bell=BELLS[0]!;
 export const DEFAULT_BELL_ID=DEFAULT_BELL.id;
