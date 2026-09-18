@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { motion, useAnimationControls } from "motion/react";
+import { motion } from "motion/react";
 import { useCallback, useState } from "react";
 
 import { BellScene3D, type BellImpulse } from "@/components/BellScene3D";
