@@ -24,6 +24,29 @@ const PROFILES: Record<BellShape, Array<[number, number]>> = {
   lotus: [[0.12, 1.3], [0.66, 1.25], [0.9, 0.72], [0.98, 0], [1.24, -0.75], [1.62, -1.38]],
 };
 
+function OrnateBand({ color }: { color: string }) {
+  return (
+    <group>
+      {Array.from({ length: 26 }, (_, index) => {
+        const angle = (index / 26) * Math.PI * 2;
+        const radius = 1.39;
+        return (
+          <group key={index} position={[Math.sin(angle) * radius, -1.13, Math.cos(angle) * radius]} rotation-y={angle}>
+            <mesh rotation-z={Math.PI / 4} scale={[0.075, 0.18, 0.035]} castShadow>
+              <sphereGeometry args={[1, 16, 12]} />
+              <meshPhysicalMaterial color={color} metalness={0.92} roughness={0.16} clearcoat={1} />
+            </mesh>
+            <mesh position={[0.1, 0.07, 0]} rotation-z={-Math.PI / 4} scale={[0.055, 0.13, 0.03]} castShadow>
+              <sphereGeometry args={[1, 16, 12]} />
+              <meshPhysicalMaterial color={color} metalness={0.92} roughness={0.16} clearcoat={1} />
+            </mesh>
+          </group>
+        );
+      })}
+    </group>
+  );
+}
+
 function BellModel({ bell, impulse }: { bell: Bell; impulse: BellImpulse }) {
   const pivot = useRef<THREE.Group>(null);
   const clapper = useRef<THREE.Group>(null);
@@ -67,22 +90,22 @@ function BellModel({ bell, impulse }: { bell: Bell; impulse: BellImpulse }) {
   };
 
   const velvet = {
-    color: bell.decoration === "ribbon" ? bell.finish.trim : "#b3132f",
-    roughness: 0.24,
+    color: "#a9071d",
+    roughness: 0.2,
     metalness: 0.08,
     clearcoat: 0.72,
     clearcoatRoughness: 0.18,
   };
 
-  const handle = bell.handle === "loop" ? (
+  const handle = bell.handle === "loop" && bell.id !== "aurum" ? (
     <mesh position={[0, 2.18, 0]} castShadow>
       <torusGeometry args={[0.5, 0.14, 24, 64]} />
       <meshPhysicalMaterial {...material} />
     </mesh>
   ) : (
-    <group position={[0, 2.03, 0]}>
+    <group position={[0, 2.08, 0]}>
       <mesh position={[0, 0.23, 0]} castShadow>
-        <sphereGeometry args={[bell.handle === "spire" ? 0.23 : 0.27, 32, 24]} />
+        <sphereGeometry args={[bell.id === "aurum" ? 0.3 : bell.handle === "spire" ? 0.23 : 0.27, 48, 32]} />
         <meshPhysicalMaterial {...material} />
       </mesh>
       <mesh position={[0, -0.02, 0]} castShadow>
@@ -94,19 +117,19 @@ function BellModel({ bell, impulse }: { bell: Bell; impulse: BellImpulse }) {
 
   const showRibbon = bell.decoration === "ribbon" || bell.id === "aurum";
   const ribbon = showRibbon ? (
-    <group position={[0, 1.77, 0.16]}>
-      <mesh position={[-0.45, 0.05, 0]} rotation-z={0.16} scale={[1.18, 0.72, 0.42]} castShadow>
-        <torusGeometry args={[0.3, 0.15, 24, 64]} />
+    <group position={[0, 1.72, 0.46]} scale={1.18}>
+      <mesh position={[-0.48, 0.06, 0]} rotation-z={0.12} scale={[1.45, 0.72, 0.34]} castShadow>
+        <torusGeometry args={[0.31, 0.14, 28, 72]} />
         <meshPhysicalMaterial {...velvet} />
       </mesh>
-      <mesh position={[0.45, 0.05, 0]} rotation-z={-0.16} scale={[1.18, 0.72, 0.42]} castShadow>
-        <torusGeometry args={[0.3, 0.15, 24, 64]} />
+      <mesh position={[0.48, 0.06, 0]} rotation-z={-0.12} scale={[1.45, 0.72, 0.34]} castShadow>
+        <torusGeometry args={[0.31, 0.14, 28, 72]} />
         <meshPhysicalMaterial {...velvet} />
       </mesh>
-      <RoundedBox args={[0.27, 1.2, 0.09]} radius={0.08} smoothness={5} position={[-0.31, -0.51, -0.07]} rotation-z={-0.33} castShadow>
+      <RoundedBox args={[0.27, 1.42, 0.1]} radius={0.07} smoothness={6} position={[-0.36, -0.63, -0.05]} rotation-z={-0.42} castShadow>
         <meshPhysicalMaterial {...velvet} />
       </RoundedBox>
-      <RoundedBox args={[0.27, 1.2, 0.09]} radius={0.08} smoothness={5} position={[0.31, -0.51, -0.07]} rotation-z={0.33} castShadow>
+      <RoundedBox args={[0.27, 1.42, 0.1]} radius={0.07} smoothness={6} position={[0.36, -0.63, -0.05]} rotation-z={0.42} castShadow>
         <meshPhysicalMaterial {...velvet} />
       </RoundedBox>
       <mesh position={[0, 0.02, 0.2]} castShadow>
@@ -124,7 +147,7 @@ function BellModel({ bell, impulse }: { bell: Bell; impulse: BellImpulse }) {
           <meshPhysicalMaterial {...material} side={THREE.DoubleSide} />
         </mesh>
         <mesh position={[0, -1.42, 0]} rotation-x={Math.PI / 2} castShadow>
-          <torusGeometry args={[1.52, 0.11, 20, 80]} />
+          <torusGeometry args={[1.52, 0.105, 24, 96]} />
           <meshPhysicalMaterial {...material} roughness={0.11} />
         </mesh>
         <mesh position={[0, -1.43, 0]} rotation-x={Math.PI / 2}>
@@ -141,6 +164,7 @@ function BellModel({ bell, impulse }: { bell: Bell; impulse: BellImpulse }) {
               <torusGeometry args={[1.43, 0.045, 20, 96]} />
               <meshPhysicalMaterial color={bell.finish.stops[2]} metalness={0.9} roughness={0.1} clearcoat={1} />
             </mesh>
+            <OrnateBand color={bell.finish.highlight} />
           </group>
         )}
         <mesh position={[0, 1.57, 0]} castShadow>
@@ -170,7 +194,7 @@ export function BellScene3D({ bell, impulse }: { bell: Bell; impulse: BellImpuls
       <Canvas
         shadows
         dpr={[1, 2]}
-        camera={{ position: [0, 0.45, 10.8], fov: 39 }}
+        camera={{ position: [0, 0.35, 9.7], fov: 39 }}
         gl={{ antialias: true, alpha: true }}
       >
         <ambientLight intensity={0.42} />
@@ -184,7 +208,7 @@ export function BellScene3D({ bell, impulse }: { bell: Bell; impulse: BellImpuls
           <Lightformer intensity={1.6} color={bell.finish.stops[2]} position={[0, -4, 3]} scale={[8, 2, 1]} />
         </Environment>
         <BellModel bell={bell} impulse={impulse} />
-        <ContactShadows position={[0, -2.72, 0]} opacity={0.28} scale={7} blur={3.5} far={7} />
+        <ContactShadows position={[0, -2.72, 0]} opacity={0.32} scale={6} blur={3.2} far={7} />
       </Canvas>
     </div>
   );
