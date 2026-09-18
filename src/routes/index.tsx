@@ -2,8 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { motion } from "motion/react";
 import { useCallback, useState } from "react";
 
-import { BellScene3D, type BellImpulse } from "@/components/BellScene3D";
-import { SettingsSheet } from "@/components/SettingsSheet";
+import signatureGoldBell from "@/assets/signature-gold-bell.png";
+import { BellScene3D } from "@/components/BellScene3D";
 import { ringBell, unlockAudio, vibrate } from "@/lib/bell-audio";
 import { useAppState } from "@/lib/app-state";
 import { useShake } from "@/lib/use-shake";
@@ -31,7 +31,7 @@ export const Route = createFileRoute("/")({
 function HomePage() {
   const { bell, volume, haptics, shakeEnabled } = useAppState();
   const [glow, setGlow] = useState(0);
-  const [impulse, setImpulse] = useState<BellImpulse>({ id: 0, intensity: 0, direction: 1 });
+  const [impulse, setImpulse] = useState({ id: 0, intensity: 0, direction: 1 });
 
   const ring = useCallback(({ intensity, x }: { intensity: number; x: number }) => {
     void unlockAudio();
@@ -43,20 +43,15 @@ function HomePage() {
     setImpulse((current) => ({ id: current.id + 1, intensity, direction }));
   }, [bell.tone, haptics, volume]);
 
-  const { permission, requestPermission } = useShake(ring, shakeEnabled);
-  const needsPermission = shakeEnabled && permission === "needs-permission";
+  useShake(ring, shakeEnabled);
 
   return (
-    <main className="relative flex min-h-screen flex-col overflow-hidden px-5 pb-24 pt-[max(1.25rem,env(safe-area-inset-top))]">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_50%_42%,color-mix(in_oklab,var(--primary)_14%,transparent),transparent_48%)]" />
-      <header className="relative z-10 flex justify-end">
-        <SettingsSheet onOpen={() => { void unlockAudio(); if (needsPermission) void requestPermission(); }} />
-      </header>
-
+    <main className="relative flex min-h-[calc(100svh-7.25rem)] flex-col overflow-hidden pb-3">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_50%_42%,color-mix(in_oklab,var(--stage-glow)_88%,transparent),transparent_54%)]" />
       <div className="relative flex flex-1 flex-col items-center justify-center">
-        <div className="relative h-[min(70vh,42rem)] w-full max-w-[30rem]" aria-hidden="true">
+        <div className="relative h-[min(78svh,46rem)] w-full max-w-[34rem]" aria-hidden="true">
           <motion.span
-            key={glow}
+            key={`glow-${glow}`}
             className="absolute size-[72%] rounded-full blur-xl"
             style={{
               background: `radial-gradient(circle, ${bell.finish.accent}55 0%, transparent 70%)`,
@@ -65,9 +60,22 @@ function HomePage() {
             animate={{ opacity: 0, scale: 1.35 }}
             transition={{ duration: 1.1, ease: "easeOut" }}
           />
-          <BellScene3D bell={bell} impulse={impulse} />
+          {bell.id === "aurum" ? (
+            <motion.img
+              key={`bell-${impulse.id}`}
+              src={signatureGoldBell}
+              alt=""
+              width={1024}
+              height={1280}
+              className="absolute inset-0 m-auto h-auto w-[92%] max-h-full object-contain drop-shadow-[0_24px_22px_color-mix(in_oklab,var(--foreground)_22%,transparent)]"
+              initial={{ rotate: impulse.direction * impulse.intensity * 8, x: impulse.direction * impulse.intensity * 8 }}
+              animate={{ rotate: [impulse.direction * impulse.intensity * 8, -impulse.direction * impulse.intensity * 5, impulse.direction * impulse.intensity * 2, 0], x: 0 }}
+              transition={{ duration: 0.58, ease: [0.22, 0.8, 0.3, 1] }}
+            />
+          ) : (
+            <BellScene3D bell={bell} impulse={impulse} />
+          )}
         </div>
-        <div className="pointer-events-none absolute bottom-[12%] h-8 w-52 rounded-full bg-background/55 blur-xl" />
       </div>
     </main>
   );

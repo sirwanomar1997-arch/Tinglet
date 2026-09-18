@@ -11,17 +11,17 @@ export function TabBar() {
   ] as const;
 
   return (
-    <nav className="fixed inset-x-0 bottom-0 z-40 flex justify-center border-t border-border bg-card/92 px-7 pb-[max(1rem,env(safe-area-inset-bottom))] pt-4 shadow-[0_-12px_40px_color-mix(in_oklab,var(--foreground)_8%,transparent)] backdrop-blur-2xl">
-      <div className="flex w-full max-w-sm items-center justify-between">
+    <nav className="fixed inset-x-0 bottom-0 z-40 flex h-[7.25rem] justify-center border-t border-nav-border bg-nav px-7 pb-[max(1rem,env(safe-area-inset-bottom))] pt-6 shadow-[0_-14px_36px_color-mix(in_oklab,var(--nav)_35%,transparent)]">
+      <div className="flex w-full max-w-md items-start justify-between">
         {items.map(({ to, label }) => (
           <Link
             key={to}
             to={to}
             activeOptions={{ exact: to === "/" }}
-            className="group relative flex min-w-20 items-center justify-center px-2 py-1 text-[11px] font-medium uppercase tracking-[0.16em] text-muted-foreground transition-colors data-[status=active]:text-primary"
+            className="group relative flex min-w-20 items-center justify-center px-1 py-1 font-serif text-[14px] font-medium uppercase tracking-[0.18em] text-nav-foreground transition-colors data-[status=active]:text-nav-active"
           >
             <span>{label}</span>
-            <span className="absolute -bottom-2 size-1 rounded-full bg-transparent shadow-none transition-all group-data-[status=active]:bg-primary group-data-[status=active]:shadow-[0_0_10px_var(--primary)]" />
+            <span className="absolute -bottom-4 size-1.5 rounded-full bg-transparent shadow-none transition-all group-data-[status=active]:bg-nav-active group-data-[status=active]:shadow-[0_0_12px_var(--nav-active)]" />
           </Link>
         ))}
       </div>
