@@ -283,15 +283,15 @@ export const DEFAULT_BACKGROUND_ID = DEFAULT_BACKGROUND.id;
 
 export const FREE_BACKGROUND_IDS = [
   "champagne-mist",
-  "blush-silk",
-  "azure-dawn",
   "pearl-grey",
-  "carrara",
-  "forest-light",
-  "soft-sky",
   "ivory",
-  "sage-solid",
   "smoked-emerald",
+  "rosewater-satin",
+  "ruby-velvet",
+  "powder-blue",
+  "frosted-lilac",
+  "navy",
+  "charcoal",
 ] as const;
 
 const DELUXE_BACKGROUNDS: Background[] = [
