@@ -87,7 +87,7 @@ function BackgroundsPage() {
             </div>
         </section>
         {!showDeluxe && (
-          <button onClick={() => setShowDeluxe(true)} className="flex w-full items-center gap-5 rounded-xl border border-primary/30 bg-card p-5 text-left shadow-[0_18px_38px_color-mix(in_oklab,var(--foreground)_12%,transparent)]">
+          <button onPointerUp={() => setShowDeluxe(true)} onClick={() => setShowDeluxe(true)} className="flex w-full items-center gap-5 rounded-xl border border-primary/30 bg-card p-5 text-left shadow-[0_18px_38px_color-mix(in_oklab,var(--foreground)_12%,transparent)]">
             <span className="flex size-14 shrink-0 items-center justify-center rounded-full bg-secondary text-primary"><FolderLock className="size-6" /></span>
             <span className="flex-1"><span className="block font-serif text-2xl text-foreground">{t("deluxeBackgrounds")}</span><span className="text-[11px] uppercase tracking-[0.17em] text-muted-foreground">{t("deluxeBackgroundsSub")}</span></span>
             <span className="font-serif text-xl text-primary">›</span>

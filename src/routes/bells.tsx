@@ -102,6 +102,7 @@ function BellsPage() {
           </section>
 
           <button
+            onPointerUp={() => setShowPremium(true)}
             onClick={() => setShowPremium(true)}
             className="relative flex w-full items-center gap-5 overflow-hidden rounded-xl border border-primary/30 bg-card p-5 text-left shadow-[0_18px_38px_color-mix(in_oklab,var(--foreground)_12%,transparent)]"
           >
