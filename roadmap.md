@@ -12,3 +12,4 @@
 - [x] Butikstext/publiceringsfil: /mnt/documents/tringlet-store/PUBLICERINGSFIL-AppStore-GooglePlay.md — klar
 - [x] Riktiga köp: Google Play / App Store-billing i appen (produkt tringlet_premium_unlock, 39 kr) — kvarstår hos användaren: skapa produkten i Play Console + betalningsprofil
 - [ ] GitHub-sync och native-paketering för iOS/Android
+- [x] Steg-för-steg-guide för GitHub + Android + Play Console: /mnt/documents/tringlet-store/GITHUB-Android-Steg-for-steg.md
