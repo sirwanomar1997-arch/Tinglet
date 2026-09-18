@@ -19,23 +19,23 @@ export type PurchaseOutcome =
   | { status: "demo" }
   | { status: "error"; message: string };
 
-async function nativeApi() {
+async function plugin() {
   if (typeof window === "undefined") return null;
   try {
     const { Capacitor } = await import("@capacitor/core");
     if (!Capacitor.isNativePlatform()) return null;
-    const { NativePurchases } = await import("@capgo/native-purchases");
-    return NativePurchases;
+    const mod = await import("@capgo/native-purchases");
+    return { api: mod.NativePurchases, inapp: mod.PURCHASE_TYPE.INAPP };
   } catch {
     return null;
   }
 }
 
 export async function isStoreAvailable(): Promise<boolean> {
-  const api = await nativeApi();
-  if (!api) return false;
+  const p = await plugin();
+  if (!p) return false;
   try {
-    const res = await api.isBillingSupported();
+    const res = await p.api.isBillingSupported();
     return Boolean(res?.isBillingSupported);
   } catch {
     return false;
@@ -44,13 +44,16 @@ export async function isStoreAvailable(): Promise<boolean> {
 
 /** Localised store price (e.g. "39,00 kr"), or null when unavailable. */
 export async function premiumPrice(): Promise<string | null> {
-  const api = await nativeApi();
-  if (!api) return null;
+  const p = await plugin();
+  if (!p) return null;
   try {
-    const res = await api.getProduct({ productIdentifier: PREMIUM_PRODUCT_ID });
-    const p = res?.product as { priceString?: string; price?: number; currencyCode?: string } | undefined;
-    if (p?.priceString) return p.priceString;
-    if (typeof p?.price === "number") return `${p.price} ${p.currencyCode ?? ""}`.trim();
+    const { product } = await p.api.getProduct({
+      productIdentifier: PREMIUM_PRODUCT_ID,
+      productType: p.inapp,
+    });
+    const info = product as { priceString?: string; price?: number; currencyCode?: string };
+    if (info?.priceString) return info.priceString;
+    if (typeof info?.price === "number") return `${info.price} ${info.currencyCode ?? ""}`.trim();
     return null;
   } catch {
     return null;
@@ -58,13 +61,13 @@ export async function premiumPrice(): Promise<string | null> {
 }
 
 export async function buyPremium(): Promise<PurchaseOutcome> {
-  const api = await nativeApi();
-  if (!api) return { status: "demo" };
+  const p = await plugin();
+  if (!p) return { status: "demo" };
   try {
     if (!(await isStoreAvailable())) return { status: "unavailable" };
-    await api.purchaseProduct({
+    await p.api.purchaseProduct({
       productIdentifier: PREMIUM_PRODUCT_ID,
-      productType: "inapp",
+      productType: p.inapp,
       quantity: 1,
     });
     return { status: "purchased" };
@@ -76,15 +79,14 @@ export async function buyPremium(): Promise<PurchaseOutcome> {
 }
 
 export async function restorePremium(): Promise<PurchaseOutcome> {
-  const api = await nativeApi();
-  if (!api) return { status: "demo" };
+  const p = await plugin();
+  if (!p) return { status: "demo" };
   try {
-    const res = await api.restorePurchases();
-    const list = (res as { customerInfo?: { activeSubscriptions?: unknown[] }; purchases?: unknown[] } | undefined);
-    const owned =
-      Array.isArray(list?.purchases) && list.purchases.length > 0
-        ? true
-        : JSON.stringify(res ?? {}).includes(PREMIUM_PRODUCT_ID);
+    const { purchases } = await p.api.getPurchases({ productType: p.inapp });
+    const owned = (purchases ?? []).some((tx) => {
+      const t = tx as { productIdentifier?: string; productId?: string };
+      return t.productIdentifier === PREMIUM_PRODUCT_ID || t.productId === PREMIUM_PRODUCT_ID;
+    });
     return owned ? { status: "restored" } : { status: "unavailable" };
   } catch (err) {
     return { status: "error", message: err instanceof Error ? err.message : String(err) };
