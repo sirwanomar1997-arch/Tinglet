@@ -51,7 +51,7 @@ function HomePage() {
       <div className="relative flex flex-1 flex-col items-center justify-center">
         <div className="relative h-[min(78svh,46rem)] w-full max-w-[34rem]" aria-hidden="true">
           <motion.span
-            key={glow}
+            key={`glow-${glow}`}
             className="absolute size-[72%] rounded-full blur-xl"
             style={{
               background: `radial-gradient(circle, ${bell.finish.accent}55 0%, transparent 70%)`,
@@ -62,7 +62,7 @@ function HomePage() {
           />
           {bell.id === "aurum" ? (
             <motion.img
-              key={impulse.id}
+              key={`bell-${impulse.id}`}
               src={signatureGoldBell}
               alt=""
               width={1024}
