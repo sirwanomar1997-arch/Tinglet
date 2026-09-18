@@ -50,8 +50,10 @@ function HomePage() {
       void unlockAudio();
       void requestPermission();
     };
-    window.addEventListener("pointerdown", prepare, { once: true });
-    return () => window.removeEventListener("pointerdown", prepare);
+    // Capture the first touch anywhere before another control can stop the
+    // event. iOS requires this direct gesture for motion and audio permission.
+    window.addEventListener("pointerdown", prepare, { once: true, capture: true });
+    return () => window.removeEventListener("pointerdown", prepare, { capture: true });
   }, [requestPermission]);
 
   return (
