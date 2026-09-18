@@ -281,6 +281,40 @@ export const BACKGROUNDS: Background[] = [
 export const DEFAULT_BACKGROUND: Background = BACKGROUNDS[0]!;
 export const DEFAULT_BACKGROUND_ID = DEFAULT_BACKGROUND.id;
 
+export const FREE_BACKGROUND_IDS = [
+  "champagne-mist",
+  "blush-silk",
+  "azure-dawn",
+  "pearl-grey",
+  "carrara",
+  "forest-light",
+  "soft-sky",
+  "ivory",
+  "sage-solid",
+  "smoked-emerald",
+] as const;
+
+const DELUXE_BACKGROUNDS: Background[] = [
+  { id: "emerald-gallery", name: { en: "Emerald Gallery", sv: "Smaragdgalleri" }, group: "moody", tone: "light", color: "#082b25", image: "radial-gradient(70% 60% at 50% 42%, rgba(225,220,180,.62), rgba(145,160,125,.24) 35%, transparent 68%), linear-gradient(155deg,#174c40,#061d19 72%)" },
+  { id: "rosewater-satin", name: { en: "Rosewater Satin", sv: "Rosenvattensatin" }, group: "gradient", tone: "dark", color: "#ead3d7", image: "radial-gradient(80% 55% at 50% 12%,rgba(255,255,255,.9),transparent 68%),linear-gradient(145deg,#faeef0,#dabac2)" },
+  { id: "opal-light", name: { en: "Opal Light", sv: "Opalljus" }, group: "gradient", tone: "dark", color: "#e9edf0", image: "radial-gradient(65% 50% at 30% 20%,rgba(255,230,241,.72),transparent),radial-gradient(65% 50% at 75% 70%,rgba(196,232,237,.72),transparent),linear-gradient(#f8f5ef,#dfe6e8)" },
+  { id: "gilded-plaster", name: { en: "Gilded Plaster", sv: "Förgylld puts" }, group: "stone", tone: "dark", color: "#e5d3af", image: "repeating-linear-gradient(112deg,rgba(120,90,45,.08) 0 2px,transparent 2px 15px),radial-gradient(circle at 50% 35%,#fff6dc,#d7bd8f)" },
+  { id: "moonlit-silk", name: { en: "Moonlit Silk", sv: "Månljussiden" }, group: "moody", tone: "light", color: "#1e2834", image: "radial-gradient(65% 60% at 50% 35%,rgba(200,220,230,.38),transparent 70%),linear-gradient(150deg,#344454,#121922)" },
+  { id: "botanical-shadow", name: { en: "Botanical Shadow", sv: "Botanisk skugga" }, group: "nature", tone: "light", color: "#233426", image: "radial-gradient(ellipse at 15% 80%,rgba(126,157,109,.42),transparent 35%),radial-gradient(ellipse at 85% 18%,rgba(190,207,166,.28),transparent 30%),linear-gradient(#344b38,#142018)" },
+  { id: "powder-blue", name: { en: "Powder Blue", sv: "Puderblå" }, group: "solid", tone: "dark", color: "#cddde5", image: "radial-gradient(circle at 50% 25%,#f9fcfd,#bfd3df)" },
+  { id: "ruby-velvet", name: { en: "Ruby Velvet", sv: "Rubinsammet" }, group: "festive", tone: "light", color: "#561523", image: "radial-gradient(65% 55% at 50% 30%,rgba(236,161,144,.4),transparent 70%),linear-gradient(145deg,#7c2435,#310b14)" },
+  { id: "frosted-lilac", name: { en: "Frosted Lilac", sv: "Frostad syren" }, group: "gradient", tone: "dark", color: "#e5dfeb", image: "radial-gradient(circle at 50% 25%,#fffafd,#d5c9df)" },
+  { id: "champagne-night", name: { en: "Champagne Night", sv: "Champagnenatt" }, group: "moody", tone: "light", color: "#292217", image: "radial-gradient(60% 50% at 50% 30%,rgba(232,197,120,.38),transparent 72%),linear-gradient(#3c3221,#17130d)" },
+  { id: "porcelain-rose", name: { en: "Porcelain Rose", sv: "Porslinsros" }, group: "nature", tone: "dark", color: "#f2e8e5", image: "radial-gradient(circle at 15% 80%,rgba(207,143,157,.34),transparent 22%),radial-gradient(circle at 85% 15%,rgba(219,174,180,.3),transparent 24%),linear-gradient(#fdf8f4,#eadbd8)" },
+  { id: "arctic-pearl", name: { en: "Arctic Pearl", sv: "Arktisk pärla" }, group: "nature", tone: "dark", color: "#e7f0f2", image: "radial-gradient(70% 50% at 50% 20%,#fff,transparent),linear-gradient(160deg,#eef7f8,#c8dce1)" },
+];
+
+BACKGROUNDS.push(...DELUXE_BACKGROUNDS);
+
+export function isPremiumBackground(id: string): boolean {
+  return !(FREE_BACKGROUND_IDS as readonly string[]).includes(id);
+}
+
 export function getBackground(id: string): Background {
   return BACKGROUNDS.find((b) => b.id === id) ?? DEFAULT_BACKGROUND;
 }
