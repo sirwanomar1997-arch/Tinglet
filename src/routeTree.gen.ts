@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as BackgroundsRouteImport } from './routes/backgrounds'
 import { Route as BellsRouteImport } from './routes/bells'
+import { Route as PrivacyRouteImport } from './routes/privacy'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -28,35 +29,44 @@ const BellsRoute = BellsRouteImport.update({
   path: '/bells',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/backgrounds': typeof BackgroundsRoute
   '/bells': typeof BellsRoute
+  '/privacy': typeof PrivacyRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/backgrounds': typeof BackgroundsRoute
   '/bells': typeof BellsRoute
+  '/privacy': typeof PrivacyRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/backgrounds': typeof BackgroundsRoute
   '/bells': typeof BellsRoute
+  '/privacy': typeof PrivacyRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/backgrounds' | '/bells'
+  fullPaths: '/' | '/backgrounds' | '/bells' | '/privacy'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/backgrounds' | '/bells'
-  id: '__root__' | '/' | '/backgrounds' | '/bells'
+  to: '/' | '/backgrounds' | '/bells' | '/privacy'
+  id: '__root__' | '/' | '/backgrounds' | '/bells' | '/privacy'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   BackgroundsRoute: typeof BackgroundsRoute
   BellsRoute: typeof BellsRoute
+  PrivacyRoute: typeof PrivacyRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -82,6 +92,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BellsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -89,6 +106,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   BackgroundsRoute: BackgroundsRoute,
   BellsRoute: BellsRoute,
+  PrivacyRoute: PrivacyRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
