@@ -42,6 +42,26 @@ const dict = {
     sv: "Ett köp låser upp alla premiumdesigner.",
   },
   restorePurchase: { en: "Restore purchase", sv: "Återställ köp" },
+  purchaseThanks: {
+    en: "Thank you! Everything is unlocked.",
+    sv: "Tack! Allt är upplåst.",
+  },
+  purchaseRestored: {
+    en: "Your purchase was restored.",
+    sv: "Ditt köp är återställt.",
+  },
+  purchaseDemo: {
+    en: "Preview mode — unlocked without payment. In the App Store / Google Play app this is a real purchase.",
+    sv: "Förhandsvisning — upplåst utan betalning. I App Store-/Google Play-appen blir detta ett riktigt köp.",
+  },
+  purchaseNotFound: {
+    en: "No purchase found for this account.",
+    sv: "Inget köp hittades för det här kontot.",
+  },
+  purchaseFailed: {
+    en: "The purchase could not be completed. Please try again.",
+    sv: "Köpet kunde inte genomföras. Försök igen.",
+  },
   unlocked: { en: "Unlocked", sv: "Upplåst" },
   packUnlocked: { en: "Pack unlocked", sv: "Paketet är upplåst" },
   freeForNow: { en: "One purchase", sv: "Ett köp" },

@@ -9,6 +9,8 @@ import { useAppState } from "@/lib/app-state";
 import { ringBell, unlockAudio, vibrate } from "@/lib/bell-audio";
 import { BACKGROUNDS, isPremiumBackground, type Background } from "@/lib/backgrounds";
 import { BELLS, isPremiumBell, type Bell } from "@/lib/bells";
+import { buyPremium, restorePremium as restorePurchase, type PurchaseOutcome } from "@/lib/purchases";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/bells")({
   head: () => ({
@@ -108,9 +110,55 @@ function CollectionPage() {
   const premiumBells = BELLS.filter((item) => isPremiumBell(item.id));
   const premiumBackgrounds = BACKGROUNDS.filter((item) => isPremiumBackground(item.id));
 
-  const unlockPremium = () => {
+  const [busy, setBusy] = useState(false);
+
+  const grant = () => {
     unlockPack("christmas");
     if (haptics) vibrate([8, 30, 8]);
+  };
+
+  const handleOutcome = (outcome: PurchaseOutcome) => {
+    switch (outcome.status) {
+      case "purchased":
+        grant();
+        toast.success(t("purchaseThanks"));
+        return;
+      case "restored":
+        grant();
+        toast.success(t("purchaseRestored"));
+        return;
+      case "demo":
+        grant();
+        toast.message(t("purchaseDemo"));
+        return;
+      case "cancelled":
+        return;
+      case "unavailable":
+        toast.error(t("purchaseNotFound"));
+        return;
+      default:
+        toast.error(t("purchaseFailed"));
+    }
+  };
+
+  const unlockPremium = async () => {
+    if (busy) return;
+    setBusy(true);
+    try {
+      handleOutcome(await buyPremium());
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const restorePremium = async () => {
+    if (busy) return;
+    setBusy(true);
+    try {
+      handleOutcome(await restorePurchase());
+    } finally {
+      setBusy(false);
+    }
   };
 
   if (!catalogOpen) {
@@ -126,7 +174,7 @@ function CollectionPage() {
           <div className="min-w-0"><p className="text-[9px] uppercase tracking-[0.25em] text-primary">{t("premiumCatalogTag")}</p><h1 className="truncate font-serif text-3xl text-foreground">{t("premiumCatalog")}</h1></div>
         </header>
 
-        {!premiumUnlocked && <section className="mb-5 overflow-hidden rounded-xl border border-nav-border bg-nav p-5 text-nav-foreground shadow-xl"><div className="flex items-start gap-3"><Sparkles className="mt-1 size-5 shrink-0 text-nav-active" /><div><p className="font-serif text-2xl leading-none">{t("premiumEverything")}</p><p className="mt-2 text-xs leading-relaxed text-nav-foreground/60">{t("premiumEverythingSub")}</p></div></div><Button type="button" onClick={unlockPremium} className="mt-4 h-12 w-full rounded-lg font-serif text-base"><Sparkles /> {t("unlockPremium")}</Button><Button type="button" variant="ghost" onClick={unlockPremium} className="mt-1 h-8 w-full text-xs text-nav-foreground/55 hover:bg-background/5 hover:text-nav-foreground">{t("restorePurchase")}</Button></section>}
+        {!premiumUnlocked && <section className="mb-5 overflow-hidden rounded-xl border border-nav-border bg-nav p-5 text-nav-foreground shadow-xl"><div className="flex items-start gap-3"><Sparkles className="mt-1 size-5 shrink-0 text-nav-active" /><div><p className="font-serif text-2xl leading-none">{t("premiumEverything")}</p><p className="mt-2 text-xs leading-relaxed text-nav-foreground/60">{t("premiumEverythingSub")}</p></div></div><Button type="button" disabled={busy} onClick={unlockPremium} className="mt-4 h-12 w-full rounded-lg font-serif text-base"><Sparkles /> {t("unlockPremium")}</Button><Button type="button" variant="ghost" disabled={busy} onClick={restorePremium} className="mt-1 h-8 w-full text-xs text-nav-foreground/55 hover:bg-background/5 hover:text-nav-foreground">{t("restorePurchase")}</Button></section>}
 
         <div className="mb-5 grid grid-cols-2 gap-2 rounded-lg border border-border bg-card/60 p-1.5">
           <Button type="button" variant={view === "bells" ? "default" : "ghost"} onClick={() => setView("bells")} className="h-11 rounded-md font-serif text-base">{t("handBells")}</Button>
