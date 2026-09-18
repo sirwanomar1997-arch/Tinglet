@@ -40,7 +40,7 @@ function BackgroundsPage() {
       {items.map((bg) => {
         const selected = background.id === bg.id;
         return <motion.button key={bg.id} whileTap={{ scale: locked ? 1 : 0.97 }} onClick={() => { if (locked) return; setBackground(bg.id); if (haptics) vibrate(6); }} className={`relative overflow-hidden rounded-xl border bg-card text-left shadow-[0_12px_28px_color-mix(in_oklab,var(--foreground)_8%,transparent)] ${selected ? "border-primary/70" : "border-border"}`}>
-          <BackgroundSwatch background={bg} className="h-28 w-full" />
+          <BackgroundSwatch background={bg} className="aspect-[4/5] w-full" />
           {locked && <span className="absolute right-2.5 top-2.5 rounded-full bg-foreground/55 p-1.5 text-background/80"><Lock className="size-3" /></span>}
           {selected && !locked && <span className="absolute right-2.5 top-2.5 rounded-full bg-primary p-1 text-primary-foreground"><Check className="size-3" strokeWidth={3} /></span>}
           <span className="block bg-card/94 px-3 py-2 font-serif text-[14px] text-card-foreground/85">{bg.name[lang]}</span>
