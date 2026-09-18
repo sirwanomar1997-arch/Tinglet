@@ -11,8 +11,9 @@ import {
 import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { useAppState } from "@/lib/app-state";
+import { Button } from "@/components/ui/button";
 
-export function SettingsSheet() {
+export function SettingsSheet({ onOpen }: { onOpen?: () => void }) {
   const {
     t,
     volume,
@@ -27,11 +28,16 @@ export function SettingsSheet() {
 
   return (
     <Sheet>
-      <SheetTrigger
+      <SheetTrigger asChild>
+        <Button
+         onClick={onOpen}
         aria-label={t("settings")}
-        className="rounded-full border border-white/12 bg-white/8 p-2.5 text-white/70 backdrop-blur-md transition-colors hover:text-white"
-      >
+         variant="ghost"
+         size="icon"
+         className="rounded-full border border-border bg-background/20 text-foreground/65 backdrop-blur-md hover:bg-background/35 hover:text-foreground"
+        >
         <Settings2 className="size-5" strokeWidth={1.6} />
+        </Button>
       </SheetTrigger>
       <SheetContent
         side="bottom"
@@ -72,17 +78,18 @@ export function SettingsSheet() {
             <span className="text-sm text-white/75">{t("language")}</span>
             <div className="flex gap-2">
               {(["en", "sv"] as const).map((l) => (
-                <button
+                <Button
                   key={l}
                   onClick={() => setLang(l)}
-                  className={`flex-1 rounded-full border px-4 py-2 text-sm transition-colors ${
+                  variant="outline"
+                  className={`flex-1 rounded-full px-4 py-2 text-sm transition-colors ${
                     lang === l
                       ? "border-[color:var(--gilt)]/60 bg-[color:var(--gilt)]/15 text-[color:var(--gilt)]"
                       : "border-white/12 text-white/60"
                   }`}
                 >
                   {l === "en" ? "English" : "Svenska"}
-                </button>
+                </Button>
               ))}
             </div>
           </div>

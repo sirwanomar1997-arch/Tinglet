@@ -86,12 +86,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { title: "Elegant Hand Bell" },
       {
         name: "description",
-        content: "A premium, elegant hand bell. Shake or tap to ring.",
+        content: "A premium, elegant hand bell. Shake naturally to ring.",
       },
       { property: "og:title", content: "Elegant Hand Bell" },
       {
         property: "og:description",
-        content: "A premium, elegant hand bell. Shake or tap to ring.",
+        content: "A premium, elegant hand bell. Shake naturally to ring.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
