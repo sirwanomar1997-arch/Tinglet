@@ -4,4 +4,4 @@
 - [x] Behåll en enda Premium-upplåsning för alla låsta val
 - [x] Gör bottenmenyn tvådelad: Hem och Klocka & bakgrund
 - [x] Förfina den gemensamma sidan och bottenmenyn visuellt
-- [ ] Verifiera mobilflödet
+- [x] Verifiera mobilflödet
