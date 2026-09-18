@@ -31,16 +31,16 @@ function BackgroundsPage() {
 
   return (
     <main className="min-h-screen px-5 pb-32 pt-[max(1.5rem,env(safe-area-inset-top))]">
-      <div className="pointer-events-none fixed inset-0 -z-10 bg-[#0d0e10]/82 backdrop-blur-2xl" />
+      <div className="pointer-events-none fixed inset-0 -z-10 bg-background/92 backdrop-blur-2xl" />
       <header className="mb-7">
-        <h1 className="font-serif text-3xl text-white">{t("chooseBackground")}</h1>
-        <p className="mt-1.5 text-sm text-white/50">{t("chooseBackgroundSub")}</p>
+        <h1 className="font-serif text-3xl text-foreground">{t("chooseBackground")}</h1>
+        <p className="mt-1.5 text-sm text-muted-foreground">{t("chooseBackgroundSub")}</p>
       </header>
 
       <div className="space-y-9">
         {BACKGROUND_GROUPS.map((group) => (
           <section key={group.id}>
-            <h2 className="mb-3 font-serif text-xl text-white/90">{group.name[lang]}</h2>
+            <h2 className="mb-3 font-serif text-xl text-foreground/90">{group.name[lang]}</h2>
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
               {BACKGROUNDS.filter((b) => b.group === group.id).map((bg) => {
                 const selected = background.id === bg.id;
@@ -52,17 +52,17 @@ function BackgroundsPage() {
                       setBackground(bg.id);
                       if (haptics) vibrate(6);
                     }}
-                    className={`relative overflow-hidden rounded-3xl border text-left transition-colors ${
-                      selected ? "border-[color:var(--gilt)]/70" : "border-white/10"
+                    className={`relative overflow-hidden rounded-xl border bg-card text-left shadow-[0_12px_28px_color-mix(in_oklab,var(--foreground)_8%,transparent)] transition-colors ${
+                      selected ? "border-primary/70" : "border-border"
                     }`}
                   >
                     <BackgroundSwatch background={bg} className="h-28 w-full" />
                     {selected && (
-                      <span className="absolute right-2.5 top-2.5 rounded-full bg-[color:var(--gilt)] p-1 text-black">
+                        <span className="absolute right-2.5 top-2.5 rounded-full bg-primary p-1 text-primary-foreground">
                         <Check className="size-3" strokeWidth={3} />
                       </span>
                     )}
-                    <span className="block bg-black/45 px-3 py-2 text-[13px] text-white/85 backdrop-blur-sm">
+                    <span className="block bg-card/94 px-3 py-2 font-serif text-[14px] text-card-foreground/85 backdrop-blur-sm">
                       {bg.name[lang]}
                     </span>
                   </motion.button>

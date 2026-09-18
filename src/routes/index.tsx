@@ -54,7 +54,6 @@ function HomePage() {
       </header>
 
       <div className="relative flex flex-1 flex-col items-center justify-center">
-        <div className="pointer-events-none absolute left-1/2 top-1/2 h-[68%] w-[84%] -translate-x-1/2 -translate-y-1/2 rounded-[50%] border border-foreground/10 bg-background/10 shadow-[inset_0_1px_0_color-mix(in_oklab,var(--foreground)_12%,transparent),0_38px_90px_color-mix(in_oklab,var(--background)_72%,transparent)] backdrop-blur-[2px]" />
         <div className="relative h-[min(70vh,42rem)] w-full max-w-[30rem]" aria-hidden="true">
           <motion.span
             key={glow}

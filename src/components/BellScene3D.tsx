@@ -65,6 +65,51 @@ function BellModel({ bell, impulse }: { bell: Bell; impulse: BellImpulse }) {
     clearcoatRoughness: 0.12,
   };
 
+  const handle = bell.handle === "loop" ? (
+    <mesh position={[0, 2.18, 0]} castShadow>
+      <torusGeometry args={[0.5, 0.14, 24, 64]} />
+      <meshPhysicalMaterial {...material} />
+    </mesh>
+  ) : (
+    <group position={[0, 2.03, 0]}>
+      <mesh position={[0, 0.23, 0]} castShadow>
+        <sphereGeometry args={[bell.handle === "spire" ? 0.23 : 0.27, 32, 24]} />
+        <meshPhysicalMaterial {...material} />
+      </mesh>
+      <mesh position={[0, -0.02, 0]} castShadow>
+        <cylinderGeometry args={[0.15, 0.27, 0.3, 32]} />
+        <meshPhysicalMaterial {...material} />
+      </mesh>
+    </group>
+  );
+
+  const showRibbon = bell.decoration === "ribbon" || bell.id === "aurum";
+  const ribbonColor = bell.decoration === "ribbon" ? bell.finish.trim : "#8f1627";
+  const ribbon = showRibbon ? (
+    <group position={[0, 1.78, 0.12]}>
+      <mesh position={[-0.48, 0.05, 0]} rotation-z={0.22} scale={[1, 0.45, 0.18]} castShadow>
+        <sphereGeometry args={[0.62, 28, 18]} />
+        <meshPhysicalMaterial color={ribbonColor} roughness={0.48} metalness={0.05} />
+      </mesh>
+      <mesh position={[0.48, 0.05, 0]} rotation-z={-0.22} scale={[1, 0.45, 0.18]} castShadow>
+        <sphereGeometry args={[0.62, 28, 18]} />
+        <meshPhysicalMaterial color={ribbonColor} roughness={0.48} metalness={0.05} />
+      </mesh>
+      <mesh position={[-0.3, -0.48, -0.07]} rotation-z={-0.32} castShadow>
+        <boxGeometry args={[0.24, 1.15, 0.1]} />
+        <meshPhysicalMaterial color={ribbonColor} roughness={0.5} />
+      </mesh>
+      <mesh position={[0.3, -0.48, -0.07]} rotation-z={0.32} castShadow>
+        <boxGeometry args={[0.24, 1.15, 0.1]} />
+        <meshPhysicalMaterial color={ribbonColor} roughness={0.5} />
+      </mesh>
+      <mesh position={[0, 0.02, 0.2]} castShadow>
+        <sphereGeometry args={[0.24, 24, 16]} />
+        <meshPhysicalMaterial color={ribbonColor} roughness={0.38} />
+      </mesh>
+    </group>
+  ) : null;
+
   return (
     <group ref={pivot} position={[0, 2.2, 0]}>
       <group position={[0, -1.05, 0]}>
@@ -81,19 +126,23 @@ function BellModel({ bell, impulse }: { bell: Bell; impulse: BellImpulse }) {
           <meshStandardMaterial color={bell.finish.shadow} roughness={0.72} side={THREE.DoubleSide} />
         </mesh>
         {bell.band && (
-          <mesh position={[0, -1.02, 0]}>
-            <torusGeometry args={[1.34, 0.025, 12, 64]} />
-            <meshPhysicalMaterial color={bell.finish.highlight} metalness={0.88} roughness={0.12} />
-          </mesh>
+          <group>
+            <mesh position={[0, -1.02, 0]} rotation-x={Math.PI / 2}>
+              <torusGeometry args={[1.34, 0.025, 12, 64]} />
+              <meshPhysicalMaterial color={bell.finish.highlight} metalness={0.88} roughness={0.12} />
+            </mesh>
+            <mesh position={[0, -1.16, 0]} rotation-x={Math.PI / 2}>
+              <torusGeometry args={[1.4, 0.035, 12, 64]} />
+              <meshPhysicalMaterial color={bell.finish.stops[2]} metalness={0.9} roughness={0.16} />
+            </mesh>
+          </group>
         )}
         <mesh position={[0, 1.57, 0]} castShadow>
           <cylinderGeometry args={[0.34, 0.5, 0.32, 48]} />
           <meshPhysicalMaterial {...material} />
         </mesh>
-        <mesh position={[0, 2.23, 0]} rotation-x={Math.PI / 2} castShadow>
-          <torusGeometry args={[0.52, 0.16, 24, 64]} />
-          <meshPhysicalMaterial {...material} />
-        </mesh>
+        {handle}
+        {ribbon}
         <group ref={clapper} position={[0, -0.45, 0]}>
           <mesh position={[0, -0.72, 0]}>
             <cylinderGeometry args={[0.045, 0.045, 1.42, 16]} />
