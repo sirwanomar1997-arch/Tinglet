@@ -14,6 +14,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { AppStateProvider, useAppState } from "../lib/app-state";
 import { BackgroundLayer } from "../components/BackgroundLayer";
 import { TabBar } from "../components/TabBar";
+import { Toaster } from "../components/ui/sonner";
 
 function NotFoundComponent() {
   return (
