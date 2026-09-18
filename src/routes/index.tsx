@@ -83,6 +83,10 @@ function HomePage() {
       )}
       <div className="relative flex flex-1 flex-col items-center justify-center">
         <div className="relative h-[min(78svh,46rem)] w-full max-w-[34rem]" aria-hidden="true">
+          {/* Soft vignette luxury frame — dissolves into the beige background */}
+          <div className="absolute inset-0 m-auto size-[88%] rounded-full bg-[radial-gradient(circle,color-mix(in_oklab,var(--stage-glow)_72%,transparent)_0%,transparent_78%)] blur-3xl" />
+          <div className="absolute inset-0 m-auto size-[74%] rounded-full shadow-[0_30px_70px_-34px_color-mix(in_oklab,var(--foreground)_10%,transparent),inset_0_2px_3px_color-mix(in_oklab,white_65%,transparent),inset_0_-18px_36px_-24px_color-mix(in_oklab,var(--foreground)_7%,transparent)]" />
+          <div className="absolute inset-0 m-auto size-[74%] rounded-full border border-[color-mix(in_oklab,var(--gilt)_22%,transparent)] blur-[1.5px]" />
           <motion.span
             key={`glow-${glow}`}
             className="absolute size-[72%] rounded-full blur-xl"
