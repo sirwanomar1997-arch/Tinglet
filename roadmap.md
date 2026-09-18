@@ -10,5 +10,5 @@
 - [x] App-ikon av guldklockan med rosa rosett (1024 App Store, 512 Play, favicon, apple-touch)
 - [x] 7 butiksbilder med olika klockor och bakgrunder
 - [x] Butikstext/publiceringsfil: /mnt/documents/tringlet-store/PUBLICERINGSFIL-AppStore-GooglePlay.md — klar
-- [ ] Riktiga köp: App Store / Google Play (39 kr, utbetalning till ägaren)
+- [x] Riktiga köp: Google Play / App Store-billing i appen (produkt tringlet_premium_unlock, 39 kr) — kvarstår hos användaren: skapa produkten i Play Console + betalningsprofil
 - [ ] GitHub-sync och native-paketering för iOS/Android
