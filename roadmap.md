@@ -1,11 +1,7 @@
-## Current request
-- [x] Replace all 69 non-reference bells with individually rendered high-resolution assets
-- [x] Normalize transparent canvas and scale to match free-01 without enlarging low-resolution pixels
-- [x] Audit every bell for white/grey fringe, blur, missing details, and inconsistent scale
-- [x] Verify representative bells on pale and dark app backgrounds at mobile size
-- [x] Rename the app and all visible metadata to Tringlet
-- [x] Keep exactly 5 free bells and 5 free backgrounds
-- [x] Put every remaining bell and background in one 20 SEK premium unlock
-- [x] Replace dominant backgrounds with calm, bell-friendly seasonal and luxury scenes inspired by the references
-- [x] Prepare a new Tringlet Lovable web address when publishing
-- [ ] Publish only after the complete collection passes
+## Aktuellt
+- [ ] Ta bort gratisklockan från Premium-katalogen och rätta antalet
+- [ ] Samla val av klocka och bakgrund på samma sida
+- [ ] Behåll en enda Premium-upplåsning för alla låsta val
+- [ ] Gör bottenmenyn tvådelad: Hem och Klocka & bakgrund
+- [ ] Förfina den gemensamma sidan och bottenmenyn visuellt
+- [ ] Verifiera mobilflödet
