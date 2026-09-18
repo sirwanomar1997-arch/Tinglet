@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { Check, Lock, Sparkles } from "lucide-react";
+import { ArrowLeft, Check, FolderLock, Lock, Sparkles } from "lucide-react";
 import { motion } from "motion/react";
+import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { useAppState } from "@/lib/app-state";
@@ -73,6 +74,7 @@ function BellCard({ bell, locked }: { bell: Bell; locked: boolean }) {
 function BellsPage() {
   const { t, lang, isUnlocked, unlockPack, haptics } = useAppState();
   const premiumUnlocked = isUnlocked("christmas");
+  const [showPremium, setShowPremium] = useState(false);
 
   const unlockPremium = () => {
     unlockPack("christmas");
@@ -87,23 +89,49 @@ function BellsPage() {
         <p className="mt-1.5 text-sm text-muted-foreground">{t("chooseBellSub")}</p>
       </header>
 
-      {!premiumUnlocked && (
-        <section className="mb-9 border-y border-border bg-card/55 px-1 py-5">
-          <p className="font-serif text-xl text-foreground">{t("premiumBundle")}</p>
-          <div className="mt-4 flex items-center gap-3">
-            <Button onClick={unlockPremium} className="h-11 flex-1 rounded-full">
-              <Sparkles aria-hidden="true" />
-              {t("unlockPremium")}
-            </Button>
-            <Button variant="ghost" size="sm" onClick={unlockPremium}>
-              {t("restorePurchase")}
-            </Button>
-          </div>
-        </section>
-      )}
+      {!showPremium ? (
+        <div className="space-y-9">
+          <section>
+            <div className="mb-3">
+              <h2 className="font-serif text-xl text-foreground/90">{t("freeCollection")}</h2>
+              <p className="text-[11px] uppercase tracking-[0.22em] text-muted-foreground">{t("included")}</p>
+            </div>
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
+              {bellsByPack("classic").map((bell) => <BellCard key={bell.id} bell={bell} locked={false} />)}
+            </div>
+          </section>
 
-      <div className="space-y-9">
-        {PACKS.map((pack) => {
+          <button
+            onClick={() => setShowPremium(true)}
+            className="relative flex w-full items-center gap-5 overflow-hidden rounded-xl border border-primary/30 bg-card p-5 text-left shadow-[0_18px_38px_color-mix(in_oklab,var(--foreground)_12%,transparent)]"
+          >
+            <span className="flex size-14 shrink-0 items-center justify-center rounded-full bg-secondary text-primary"><FolderLock className="size-6" /></span>
+            <span className="min-w-0 flex-1">
+              <span className="block font-serif text-2xl text-foreground">{t("premiumCollection")}</span>
+              <span className="mt-1 block text-[11px] uppercase tracking-[0.17em] text-muted-foreground">{t("premiumCollectionSub")}</span>
+            </span>
+            <span className="font-serif text-xl text-primary">›</span>
+          </button>
+        </div>
+      ) : (
+        <div className="space-y-8">
+          <Button variant="ghost" onClick={() => setShowPremium(false)} className="-ml-3 text-muted-foreground">
+            <ArrowLeft /> {t("closeCollection")}
+          </Button>
+
+          {!premiumUnlocked && (
+            <section className="border-y border-border bg-card/55 px-1 py-5">
+              <p className="font-serif text-xl text-foreground">{t("premiumBundle")}</p>
+              <div className="mt-4 flex items-center gap-3">
+                <Button onClick={unlockPremium} className="h-11 flex-1 rounded-full">
+                  <Sparkles aria-hidden="true" /> {t("unlockPremium")}
+                </Button>
+                <Button variant="ghost" size="sm" onClick={unlockPremium}>{t("restorePurchase")}</Button>
+              </div>
+            </section>
+          )}
+
+          {PACKS.filter((pack) => pack.premium).map((pack) => {
           const unlocked = isUnlocked(pack.id);
           const bells = bellsByPack(pack.id);
           if (bells.length === 0) return null;
@@ -129,8 +157,9 @@ function BellsPage() {
               </div>
             </section>
           );
-        })}
-      </div>
+          })}
+        </div>
+      )}
     </main>
   );
 }
