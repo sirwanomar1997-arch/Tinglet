@@ -10,3 +10,5 @@
 - [x] Match every bell crop to the approved pink bell and remove all pale background remnants from every transparent asset.
 - [x] Replace the deluxe background collection with richer, varied, premium-quality visual directions.
 - [x] Match the newly uploaded hand-bell sound reference and make playback convincingly loud while remaining clean.
+- [ ] Normalize all 70 bell assets to the approved gold-and-pink bell scale, crop, transparency, and sharpness in both home and catalogue.
+- [ ] Upgrade all 30 deluxe backgrounds with richer, varied luxury detail and consistent premium catalogue presentation.
