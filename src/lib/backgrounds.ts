@@ -6,6 +6,8 @@ export type BackgroundGroup =
   | "festive"
   | "moody";
 
+import { DELUXE_BACKGROUND_IMAGES } from "@/lib/background-assets";
+
 export type Background = {
   id: string;
   name: { en: string; sv: string };
@@ -14,6 +16,8 @@ export type Background = {
   tone: "light" | "dark";
   /** Layered CSS background (topmost layer first). */
   image: string;
+  /** Optional high-resolution artwork used by deluxe backgrounds. */
+  asset?: string;
   color: string;
 };
 
@@ -325,7 +329,13 @@ const DELUXE_BACKGROUNDS: Background[] = [
   { id: "mahogany-panel", name: { en: "Mahogany Panel", sv: "Mahognypanel" }, group: "moody", tone: "light", color: "#35140e", image: "repeating-linear-gradient(93deg,rgba(255,205,150,.035) 0 2px,transparent 2px 20px),radial-gradient(ellipse at 50% 20%,rgba(214,139,91,.3),transparent 45%),linear-gradient(150deg,#642a1c,#1e0906 80%)" },
   { id: "silver-filigree", name: { en: "Silver Filigree", sv: "Silverfiligran" }, group: "festive", tone: "dark", color: "#d9dde0", image: "repeating-radial-gradient(ellipse at 50% 50%,rgba(93,109,119,.09) 0 2px,transparent 3px 22px),radial-gradient(circle at 50% 25%,#fbfcfc,#bdc5ca)" },
   { id: "gold-leaf", name: { en: "Gold Leaf", sv: "Bladguld" }, group: "festive", tone: "dark", color: "#d5b569", image: "linear-gradient(118deg,transparent 30%,rgba(255,245,193,.56) 31%,transparent 34%),linear-gradient(62deg,transparent 60%,rgba(117,75,18,.18) 61%,transparent 63%),radial-gradient(circle at 48% 25%,#f4dc93,#ae812e)" },
+  { id: "cognac-leather", name: { en: "Cognac Leather", sv: "Cognacsläder" }, group: "moody", tone: "light", color: "#4b1d10", image: "linear-gradient(155deg,#7d3520,#281008)" },
 ];
+
+DELUXE_BACKGROUNDS.forEach((background) => {
+  const asset = DELUXE_BACKGROUND_IMAGES[background.id];
+  if (asset) background.asset = asset;
+});
 
 const freeBackgrounds = BACKGROUNDS.filter((background) =>
   (FREE_BACKGROUND_IDS as readonly string[]).includes(background.id),

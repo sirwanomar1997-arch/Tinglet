@@ -64,7 +64,11 @@ function BellCard({ bell, locked }: { bell: Bell; locked: boolean }) {
         <img
           src={bell.image}
           alt=""
-          className="size-full object-contain drop-shadow-[0_12px_10px_color-mix(in_oklab,var(--foreground)_16%,transparent)]"
+          width={1024}
+          height={1024}
+          loading="lazy"
+          decoding="async"
+          className="size-full object-contain drop-shadow-[0_10px_8px_color-mix(in_oklab,var(--foreground)_14%,transparent)]"
         />
       </div>
       <span className="font-serif text-[15px] text-foreground/80">{bell.name[lang]}</span>
