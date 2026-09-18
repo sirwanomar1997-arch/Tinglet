@@ -66,7 +66,7 @@ function BellModel({ bell, impulse }: { bell: Bell; impulse: BellImpulse }) {
   };
 
   return (
-    <group ref={pivot} position={[0, 2.65, 0]}>
+    <group ref={pivot} position={[0, 2.2, 0]}>
       <group position={[0, -1.05, 0]}>
         <mesh castShadow receiveShadow>
           <latheGeometry args={[profile, bell.shape === "faceted" ? 12 : 64]} />
@@ -115,7 +115,7 @@ export function BellScene3D({ bell, impulse }: { bell: Bell; impulse: BellImpuls
       <Canvas
         shadows
         dpr={[1, 1.75]}
-        camera={{ position: [0, 0.3, 10], fov: 37 }}
+        camera={{ position: [0, 0.6, 11.5], fov: 38 }}
         gl={{ antialias: true, alpha: true }}
       >
         <ambientLight intensity={0.55} />
@@ -128,7 +128,7 @@ export function BellScene3D({ bell, impulse }: { bell: Bell; impulse: BellImpuls
           <Lightformer intensity={1.2} color={bell.finish.stops[2]} position={[0, -4, 3]} scale={[8, 2, 1]} />
         </Environment>
         <BellModel bell={bell} impulse={impulse} />
-        <ContactShadows position={[0, -3.1, 0]} opacity={0.42} scale={7} blur={2.8} far={7} />
+        <ContactShadows position={[0, -2.72, 0]} opacity={0.42} scale={7} blur={2.8} far={7} />
       </Canvas>
     </div>
   );
