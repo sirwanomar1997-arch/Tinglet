@@ -141,6 +141,7 @@ function AppChrome() {
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <Outlet />
       <TabBar />
+      <Toaster position="top-center" />
     </>
   );
 }
