@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Check, Lock, Sparkles } from "lucide-react";
 import { motion } from "motion/react";
 
-import { BellArt } from "@/components/BellArt";
+import { Button } from "@/components/ui/button";
 import { useAppState } from "@/lib/app-state";
 import { ringBell, unlockAudio, vibrate } from "@/lib/bell-audio";
 import { PACKS, bellsByPack, type Bell } from "@/lib/bells";
@@ -58,8 +58,12 @@ function BellCard({ bell, locked }: { bell: Bell; locked: boolean }) {
           <Lock className="size-3" strokeWidth={2} />
         </span>
       )}
-      <div className={locked ? "opacity-45 blur-[1px]" : ""}>
-        <BellArt bell={bell} className="h-28 w-auto" />
+      <div className={`aspect-square w-full ${locked ? "opacity-55" : ""}`}>
+        <img
+          src={bell.image}
+          alt=""
+          className="size-full object-contain drop-shadow-[0_12px_10px_color-mix(in_oklab,var(--foreground)_16%,transparent)]"
+        />
       </div>
       <span className="font-serif text-[15px] text-foreground/80">{bell.name[lang]}</span>
     </motion.button>
@@ -68,6 +72,12 @@ function BellCard({ bell, locked }: { bell: Bell; locked: boolean }) {
 
 function BellsPage() {
   const { t, lang, isUnlocked, unlockPack, haptics } = useAppState();
+  const premiumUnlocked = isUnlocked("christmas");
+
+  const unlockPremium = () => {
+    unlockPack("christmas");
+    if (haptics) vibrate([8, 30, 8]);
+  };
 
   return (
     <main className="min-h-screen px-5 pb-32 pt-[max(1.5rem,env(safe-area-inset-top))]">
@@ -76,6 +86,21 @@ function BellsPage() {
         <h1 className="font-serif text-3xl text-foreground">{t("chooseBell")}</h1>
         <p className="mt-1.5 text-sm text-muted-foreground">{t("chooseBellSub")}</p>
       </header>
+
+      {!premiumUnlocked && (
+        <section className="mb-9 border-y border-border bg-card/55 px-1 py-5">
+          <p className="font-serif text-xl text-foreground">{t("premiumBundle")}</p>
+          <div className="mt-4 flex items-center gap-3">
+            <Button onClick={unlockPremium} className="h-11 flex-1 rounded-full">
+              <Sparkles aria-hidden="true" />
+              {t("unlockPremium")}
+            </Button>
+            <Button variant="ghost" size="sm" onClick={unlockPremium}>
+              {t("restorePurchase")}
+            </Button>
+          </div>
+        </section>
+      )}
 
       <div className="space-y-9">
         {PACKS.map((pack) => {
@@ -96,18 +121,6 @@ function BellsPage() {
                       : t("included")}
                   </p>
                 </div>
-                {pack.premium && !unlocked && (
-                  <button
-                    onClick={() => {
-                      unlockPack(pack.id);
-                      if (haptics) vibrate([8, 30, 8]);
-                    }}
-                    className="flex shrink-0 items-center gap-1.5 rounded-full border border-primary/45 bg-primary/10 px-3.5 py-2 text-xs text-primary"
-                  >
-                    <Sparkles className="size-3.5" strokeWidth={1.8} />
-                    {t("unlockPack")}
-                  </button>
-                )}
               </div>
               <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
                 {bells.map((bell) => (

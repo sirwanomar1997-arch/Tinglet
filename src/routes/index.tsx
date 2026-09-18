@@ -2,8 +2,6 @@ import { createFileRoute } from "@tanstack/react-router";
 import { motion } from "motion/react";
 import { useCallback, useState } from "react";
 
-import signatureGoldBell from "@/assets/signature-gold-bell.png";
-import { BellScene3D } from "@/components/BellScene3D";
 import { ringBell, unlockAudio, vibrate } from "@/lib/bell-audio";
 import { useAppState } from "@/lib/app-state";
 import { useShake } from "@/lib/use-shake";
@@ -60,21 +58,17 @@ function HomePage() {
             animate={{ opacity: 0, scale: 1.35 }}
             transition={{ duration: 1.1, ease: "easeOut" }}
           />
-          {bell.id === "aurum" ? (
-            <motion.img
-              key={`bell-${impulse.id}`}
-              src={signatureGoldBell}
-              alt=""
-              width={1024}
-              height={1280}
-              className="absolute inset-0 m-auto h-auto w-[92%] max-h-full object-contain drop-shadow-[0_24px_22px_color-mix(in_oklab,var(--foreground)_22%,transparent)]"
-              initial={{ rotate: impulse.direction * impulse.intensity * 8, x: impulse.direction * impulse.intensity * 8 }}
-              animate={{ rotate: [impulse.direction * impulse.intensity * 8, -impulse.direction * impulse.intensity * 5, impulse.direction * impulse.intensity * 2, 0], x: 0 }}
-              transition={{ duration: 0.58, ease: [0.22, 0.8, 0.3, 1] }}
-            />
-          ) : (
-            <BellScene3D bell={bell} impulse={impulse} />
-          )}
+          <motion.img
+            key={`bell-${bell.id}-${impulse.id}`}
+            src={bell.image}
+            alt=""
+            width={512}
+            height={512}
+            className="absolute inset-0 m-auto size-[94%] object-contain drop-shadow-[0_28px_24px_color-mix(in_oklab,var(--foreground)_24%,transparent)]"
+            initial={{ rotate: impulse.direction * impulse.intensity * 8, x: impulse.direction * impulse.intensity * 8 }}
+            animate={{ rotate: [impulse.direction * impulse.intensity * 8, -impulse.direction * impulse.intensity * 5, impulse.direction * impulse.intensity * 2, 0], x: 0 }}
+            transition={{ duration: 0.58, ease: [0.22, 0.8, 0.3, 1] }}
+          />
         </div>
       </div>
     </main>
