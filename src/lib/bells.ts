@@ -28,7 +28,7 @@ const finishes:Finish[]=[
 const shapes:BellShape[]=["classic","tulip","dome","fluted","pagoda","slim","teardrop","lotus","cathedral","faceted"];
 const handles:HandleKind[]=["loop","knob","stem","spire"];
 const partials=[1,2.02,2.68,3.47,4.16,5.43,6.79,8.21];
-const makeBell=(id:string,pack:PackId,en:string,sv:string,index:number):Bell=>({id,pack,name:{en,sv},shape:shapes[index%shapes.length]??"classic",handle:handles[index%handles.length]??"loop",decoration:pack==="classic"?"none":pack==="christmas"?"holly":pack==="spring"?"flower":pack==="autumn"?"leaf":pack==="halloween"?"web":"crown",band:index%2===0,finish:finishes[index%finishes.length]??finishes[0]!,tone:{base:560+(index%10)*25,partials,decay:4.2+(index%5)*.28,brightness:.68+(index%4)*.07},image:BELL_IMAGES[id]??"");
+const makeBell=(id:string,pack:PackId,en:string,sv:string,index:number):Bell=>({id,pack,name:{en,sv},shape:shapes[index%shapes.length]??"classic",handle:handles[index%handles.length]??"loop",decoration:pack==="classic"?"none":pack==="christmas"?"holly":pack==="spring"?"flower":pack==="autumn"?"leaf":pack==="halloween"?"web":"crown",band:index%2===0,finish:finishes[index%finishes.length]??finishes[0]!,tone:{base:560+(index%10)*25,partials,decay:4.2+(index%5)*.28,brightness:.68+(index%4)*.07},image:BELL_IMAGES[id]??""});
 
 export const BELLS:Bell[]=[
  makeBell("free-01","classic","Rosette Gold","Rosettguld",0),
