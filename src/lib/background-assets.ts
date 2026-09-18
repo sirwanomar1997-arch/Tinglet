@@ -1,63 +1,63 @@
-import deluxe01 from "@/assets/backgrounds/deluxe-01.webp";
-import deluxe02 from "@/assets/backgrounds/deluxe-02.webp";
-import deluxe03 from "@/assets/backgrounds/deluxe-03.webp";
-import deluxe04 from "@/assets/backgrounds/deluxe-04.webp";
-import deluxe05 from "@/assets/backgrounds/deluxe-05.webp";
-import deluxe06 from "@/assets/backgrounds/deluxe-06.webp";
-import deluxe07 from "@/assets/backgrounds/deluxe-07.webp";
-import deluxe08 from "@/assets/backgrounds/deluxe-08.webp";
-import deluxe09 from "@/assets/backgrounds/deluxe-09.webp";
-import deluxe10 from "@/assets/backgrounds/deluxe-10.webp";
-import deluxe11 from "@/assets/backgrounds/deluxe-11.webp";
-import deluxe12 from "@/assets/backgrounds/deluxe-12.webp";
-import deluxe13 from "@/assets/backgrounds/deluxe-13.webp";
-import deluxe14 from "@/assets/backgrounds/deluxe-14.webp";
-import deluxe15 from "@/assets/backgrounds/deluxe-15.webp";
-import deluxe16 from "@/assets/backgrounds/deluxe-16.webp";
-import deluxe17 from "@/assets/backgrounds/deluxe-17.webp";
-import deluxe18 from "@/assets/backgrounds/deluxe-18.webp";
-import deluxe19 from "@/assets/backgrounds/deluxe-19.webp";
-import deluxe20 from "@/assets/backgrounds/deluxe-20.webp";
-import deluxe21 from "@/assets/backgrounds/deluxe-21.webp";
-import deluxe22 from "@/assets/backgrounds/deluxe-22.webp";
-import deluxe23 from "@/assets/backgrounds/deluxe-23.webp";
-import deluxe24 from "@/assets/backgrounds/deluxe-24.webp";
-import deluxe25 from "@/assets/backgrounds/deluxe-25.webp";
-import deluxe26 from "@/assets/backgrounds/deluxe-26.webp";
-import deluxe27 from "@/assets/backgrounds/deluxe-27.webp";
-import deluxe28 from "@/assets/backgrounds/deluxe-28.webp";
-import deluxe29 from "@/assets/backgrounds/deluxe-29.webp";
-import deluxe30 from "@/assets/backgrounds/deluxe-30.webp";
+import alabasterPanel from "@/assets/backgrounds/premium-alabaster-panel.webp";
+import autumnFrame from "@/assets/backgrounds/premium-autumn-frame.webp";
+import blossomDawn from "@/assets/backgrounds/premium-blossom-dawn.webp";
+import blushPanel from "@/assets/backgrounds/premium-blush-panel.webp";
+import blushPearl from "@/assets/backgrounds/premium-blush-pearl.webp";
+import celadonPorcelain from "@/assets/backgrounds/premium-celadon-porcelain.webp";
+import champagneGold from "@/assets/backgrounds/premium-champagne-gold.webp";
+import cognacLeather from "@/assets/backgrounds/premium-cognac-leather.webp";
+import darkLeather from "@/assets/backgrounds/premium-dark-leather.webp";
+import duskyRose from "@/assets/backgrounds/premium-dusky-rose.webp";
+import emeraldStone from "@/assets/backgrounds/premium-emerald-stone.webp";
+import evergreenBorder from "@/assets/backgrounds/premium-evergreen-border.webp";
+import floralDawn from "@/assets/backgrounds/premium-floral-dawn.webp";
+import forestRelief from "@/assets/backgrounds/premium-forest-relief.webp";
+import halloweenMoon from "@/assets/backgrounds/premium-halloween-moon.webp";
+import ivoryMarble from "@/assets/backgrounds/premium-ivory-marble.webp";
+import ivoryNouveau from "@/assets/backgrounds/premium-ivory-nouveau.webp";
+import lavenderDawn from "@/assets/backgrounds/premium-lavender-dawn.webp";
+import mistWoodland from "@/assets/backgrounds/premium-mist-woodland.webp";
+import moonstone from "@/assets/backgrounds/premium-moonstone.webp";
+import petalLinen from "@/assets/backgrounds/premium-petal-linen.webp";
+import pressedFern from "@/assets/backgrounds/premium-pressed-fern.webp";
+import roseQuartz from "@/assets/backgrounds/premium-rose-quartz.webp";
+import sageEmbroidery from "@/assets/backgrounds/premium-sage-embroidery.webp";
+import sandstone from "@/assets/backgrounds/premium-sandstone.webp";
+import silverRelief from "@/assets/backgrounds/premium-silver-relief.webp";
+import smokyQuartz from "@/assets/backgrounds/premium-smoky-quartz.webp";
+import snowCrystal from "@/assets/backgrounds/premium-snow-crystal.webp";
+import wildflowerLinen from "@/assets/backgrounds/premium-wildflower-linen.webp";
+import winterIvory from "@/assets/backgrounds/premium-winter-ivory.webp";
 
-export const DELUXE_BACKGROUND_IMAGES: Record<string, string> = {
-  "emerald-silk": deluxe01,
-  "garnet-velvet": deluxe02,
-  "rose-satin": deluxe03,
-  "champagne-drape": deluxe04,
-  "midnight-atelier": deluxe05,
-  "onyx-gold": deluxe06,
-  "rose-marble": deluxe07,
-  "jade-lacquer": deluxe08,
-  "porcelain-botanical": deluxe09,
-  "burgundy-brocade": deluxe10,
-  "ivory-damask": deluxe11,
-  "plum-silk": deluxe12,
-  "powder-rose": deluxe13,
-  "cobalt-glass": deluxe14,
-  "alabaster-relief": deluxe15,
-  "forest-brocade": deluxe16,
-  "moonstone": deluxe17,
-  "antique-mirror": deluxe18,
-  "black-satin": deluxe19,
-  "winter-palace": deluxe20,
-  "gilded-holiday": deluxe21,
-  "spring-atelier": deluxe22,
-  "terracotta-villa": deluxe23,
-  "aqua-crystal": deluxe24,
-  "copper-patina": deluxe25,
-  "lilac-couture": deluxe26,
-  "mahogany-panel": deluxe27,
-  "silver-filigree": deluxe28,
-  "gold-leaf": deluxe29,
-  "cognac-leather": deluxe30,
-};
+export const PREMIUM_BACKGROUND_IMAGES = {
+  "alabaster-panel": alabasterPanel,
+  "autumn-frame": autumnFrame,
+  "blossom-dawn": blossomDawn,
+  "blush-panel": blushPanel,
+  "blush-pearl": blushPearl,
+  "celadon-porcelain": celadonPorcelain,
+  "champagne-gold": champagneGold,
+  "cognac-leather": cognacLeather,
+  "dark-leather": darkLeather,
+  "dusky-rose": duskyRose,
+  "emerald-stone": emeraldStone,
+  "evergreen-border": evergreenBorder,
+  "floral-dawn": floralDawn,
+  "forest-relief": forestRelief,
+  "halloween-moon": halloweenMoon,
+  "ivory-marble": ivoryMarble,
+  "ivory-nouveau": ivoryNouveau,
+  "lavender-dawn": lavenderDawn,
+  "mist-woodland": mistWoodland,
+  moonstone,
+  "petal-linen": petalLinen,
+  "pressed-fern": pressedFern,
+  "rose-quartz": roseQuartz,
+  "sage-embroidery": sageEmbroidery,
+  sandstone,
+  "silver-relief": silverRelief,
+  "smoky-quartz": smokyQuartz,
+  "snow-crystal": snowCrystal,
+  "wildflower-linen": wildflowerLinen,
+  "winter-ivory": winterIvory,
+} as const;
