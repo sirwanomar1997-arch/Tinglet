@@ -41,7 +41,7 @@ function BellCard({ bell, locked }: { bell: Bell; locked: boolean }) {
   return (
     <motion.button
       onClick={choose}
-      whileTap={locked ? undefined : { scale: 0.97 }}
+      whileTap={{ scale: locked ? 1 : 0.97 }}
       className={`relative flex flex-col items-center gap-2 rounded-3xl border p-3 pt-4 text-center transition-colors ${
         selected
           ? "border-[color:var(--gilt)]/60 bg-white/10"

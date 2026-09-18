@@ -28,7 +28,7 @@ export const Route = createFileRoute("/")({
 });
 
 function HomePage() {
-  const { bell, background, volume, haptics, shakeEnabled, t } = useAppState();
+  const { bell, background, volume, haptics, shakeEnabled, t, lang } = useAppState();
   const controls = useAnimationControls();
   const [clapper, setClapper] = useState(0);
   const [glow, setGlow] = useState(0);
@@ -66,7 +66,7 @@ function HomePage() {
           <h1
             className={`font-serif text-2xl leading-tight ${light ? "text-white" : "text-black/80"}`}
           >
-            {bell.name[useAppState().lang]}
+            {bell.name[lang]}
           </h1>
         </div>
         <SettingsSheet />
