@@ -86,7 +86,7 @@ export function ringBell(tone: Tone, volume = 1, intensity = 0.7): void {
 
   strikeNoise(context, bus, now, 0.018 + force * 0.025);
 
-  tone.partials.forEach((ratio, index) => {
+  tone.partials.slice(0, 6).forEach((ratio, index) => {
     // Every visual design uses the same carefully voiced, soft hand-bell timbre.
     const handBellBase = 784;
     const softPartials = [1, 2.01, 2.58, 3.44, 4.09, 5.2];
