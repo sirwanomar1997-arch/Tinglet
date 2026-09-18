@@ -10,33 +10,53 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as BackgroundsRouteImport } from './routes/backgrounds'
+import { Route as BellsRouteImport } from './routes/bells'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BackgroundsRoute = BackgroundsRouteImport.update({
+  id: '/backgrounds',
+  path: '/backgrounds',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BellsRoute = BellsRouteImport.update({
+  id: '/bells',
+  path: '/bells',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/backgrounds': typeof BackgroundsRoute
+  '/bells': typeof BellsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/backgrounds': typeof BackgroundsRoute
+  '/bells': typeof BellsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/backgrounds': typeof BackgroundsRoute
+  '/bells': typeof BellsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/backgrounds' | '/bells'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/backgrounds' | '/bells'
+  id: '__root__' | '/' | '/backgrounds' | '/bells'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  BackgroundsRoute: typeof BackgroundsRoute
+  BellsRoute: typeof BellsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +68,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/backgrounds': {
+      id: '/backgrounds'
+      path: '/backgrounds'
+      fullPath: '/backgrounds'
+      preLoaderRoute: typeof BackgroundsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/bells': {
+      id: '/bells'
+      path: '/bells'
+      fullPath: '/bells'
+      preLoaderRoute: typeof BellsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  BackgroundsRoute: BackgroundsRoute,
+  BellsRoute: BellsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
