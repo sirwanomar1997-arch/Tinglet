@@ -17,6 +17,8 @@ export const Route = createFileRoute("/bells")({
           "Browse the bell collection: gold, rose gold, silver, porcelain and onyx bells, plus seasonal Christmas, spring, autumn and Halloween packs.",
       },
       { property: "og:title", content: "Bell Collection — Elegant Hand Bell" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       {
         property: "og:description",
         content: "Choose your favourite bell. Each one has its own shape, finish and tone.",

@@ -287,11 +287,11 @@ export const FREE_BACKGROUND_IDS = [
   "azure-dawn",
   "pearl-grey",
   "carrara",
-  "forest-light",
-  "soft-sky",
   "ivory",
-  "sage-solid",
   "smoked-emerald",
+  "christmas-velvet",
+  "navy",
+  "charcoal",
 ] as const;
 
 const DELUXE_BACKGROUNDS: Background[] = [
@@ -307,6 +307,7 @@ const DELUXE_BACKGROUNDS: Background[] = [
   { id: "champagne-night", name: { en: "Champagne Night", sv: "Champagnenatt" }, group: "moody", tone: "light", color: "#292217", image: "radial-gradient(60% 50% at 50% 30%,rgba(232,197,120,.38),transparent 72%),linear-gradient(#3c3221,#17130d)" },
   { id: "porcelain-rose", name: { en: "Porcelain Rose", sv: "Porslinsros" }, group: "nature", tone: "dark", color: "#f2e8e5", image: "radial-gradient(circle at 15% 80%,rgba(207,143,157,.34),transparent 22%),radial-gradient(circle at 85% 15%,rgba(219,174,180,.3),transparent 24%),linear-gradient(#fdf8f4,#eadbd8)" },
   { id: "arctic-pearl", name: { en: "Arctic Pearl", sv: "Arktisk pärla" }, group: "nature", tone: "dark", color: "#e7f0f2", image: "radial-gradient(70% 50% at 50% 20%,#fff,transparent),linear-gradient(160deg,#eef7f8,#c8dce1)" },
+  { id: "lacquered-mahogany", name: { en: "Lacquered Mahogany", sv: "Lackerad mahogny" }, group: "moody", tone: "light", color: "#30150f", image: "radial-gradient(75% 45% at 50% 28%,rgba(224,158,112,.3),transparent 68%),repeating-linear-gradient(96deg,rgba(255,220,180,.035) 0 1px,transparent 1px 18px),linear-gradient(155deg,#54271c,#210c08 76%)" },
 ];
 
 BACKGROUNDS.push(...DELUXE_BACKGROUNDS);

@@ -92,10 +92,10 @@
   --input: oklch(0.54 0.05 72 / 22%);
   --ring: oklch(0.61 0.105 76 / 55%);
   --stage-glow: oklch(1 0.035 84);
-  --nav: oklch(0.205 0.025 65);
-  --nav-border: oklch(0.7 0.06 75 / 20%);
-  --nav-foreground: oklch(0.91 0.025 80);
-  --nav-active: oklch(0.81 0.12 77);
+  --nav: oklch(0.17 0.035 54);
+  --nav-border: oklch(0.69 0.07 72 / 24%);
+  --nav-foreground: oklch(0.9 0.025 78);
+  --nav-active: oklch(0.84 0.13 78);
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
