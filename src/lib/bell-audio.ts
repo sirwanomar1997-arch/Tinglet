@@ -1,7 +1,10 @@
 import type { Tone } from "./bells";
+import handBellAsset from "@/assets/audio/signature-handbell.mp3.asset.json";
 
 let ctx: AudioContext | null = null;
 let master: GainNode | null = null;
+let handBellBuffer: AudioBuffer | null = null;
+let handBellLoading: Promise<void> | null = null;
 
 type Ctor = typeof AudioContext;
 
@@ -28,6 +31,24 @@ function ensureContext(): AudioContext | null {
   return ctx;
 }
 
+function loadHandBell(context: AudioContext): Promise<void> {
+  if (handBellBuffer) return Promise.resolve();
+  if (handBellLoading) return handBellLoading;
+  handBellLoading = fetch(handBellAsset.url)
+    .then((response) => {
+      if (!response.ok) throw new Error(`Bell audio failed: ${response.status}`);
+      return response.arrayBuffer();
+    })
+    .then((data) => context.decodeAudioData(data))
+    .then((buffer) => {
+      handBellBuffer = buffer;
+    })
+    .catch(() => {
+      handBellBuffer = null;
+    });
+  return handBellLoading;
+}
+
 /** Call from a user gesture so iOS/Android allow audio. */
 export async function unlockAudio(): Promise<void> {
   const context = ensureContext();
@@ -39,6 +60,7 @@ export async function unlockAudio(): Promise<void> {
       /* ignore */
     }
   }
+  await loadHandBell(context);
 }
 
 function strikeNoise(context: AudioContext, target: AudioNode, when: number, gain: number) {
@@ -73,8 +95,41 @@ export function ringBell(tone: Tone, volume = 1, intensity = 0.7): void {
   if (context.state === "suspended") void context.resume();
 
   const now = context.currentTime + 0.005;
-  const bus = context.createGain();
   const force = Math.max(0.14, Math.min(1, intensity));
+
+  if (handBellBuffer) {
+    const source = context.createBufferSource();
+    source.buffer = handBellBuffer;
+    source.playbackRate.value = 0.985 + force * 0.025;
+
+    const presence = context.createBiquadFilter();
+    presence.type = "peaking";
+    presence.frequency.value = 2300;
+    presence.Q.value = 0.7;
+    presence.gain.value = 2.2;
+
+    const compressor = context.createDynamicsCompressor();
+    compressor.threshold.value = -12;
+    compressor.knee.value = 8;
+    compressor.ratio.value = 3;
+    compressor.attack.value = 0.004;
+    compressor.release.value = 0.18;
+
+    const gain = context.createGain();
+    const level = Math.max(0, Math.min(1, volume)) * (0.72 + force * 0.58);
+    gain.gain.setValueAtTime(level, now);
+    gain.gain.exponentialRampToValueAtTime(Math.max(0.0001, level * 0.72), now + 2.3);
+
+    source.connect(presence);
+    presence.connect(compressor);
+    compressor.connect(gain);
+    gain.connect(master);
+    source.start(now);
+    return;
+  }
+
+  void loadHandBell(context);
+  const bus = context.createGain();
   bus.gain.value = Math.max(0, Math.min(1, volume)) * (0.2 + force * 0.34);
   const warmth = context.createBiquadFilter();
   warmth.type = "lowpass";
