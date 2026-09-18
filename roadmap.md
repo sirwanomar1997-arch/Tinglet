@@ -7,6 +7,6 @@
 - [x] Polish transparent bell edges, enlarge the home bell, add the Halloween ghost, consolidate premium browsing, add 10 free and 30 deluxe backgrounds, and make shake motion continuous with one hand-bell sound.
 - [x] Restore the sharper original bell scale, remove the visible cutout fringe, curate the free and deluxe backgrounds, and slim the luxury navigation.
 - [x] Match the newly approved home bell size exactly while keeping the rendered bell crisp and free of blur.
-- [ ] Match every bell crop to the approved pink bell and remove all pale background remnants from every transparent asset.
-- [ ] Replace the deluxe background collection with richer, varied, premium-quality visual directions.
-- [ ] Match the newly uploaded hand-bell sound reference and make playback convincingly loud while remaining clean.
+- [x] Match every bell crop to the approved pink bell and remove all pale background remnants from every transparent asset.
+- [x] Replace the deluxe background collection with richer, varied, premium-quality visual directions.
+- [x] Match the newly uploaded hand-bell sound reference and make playback convincingly loud while remaining clean.
