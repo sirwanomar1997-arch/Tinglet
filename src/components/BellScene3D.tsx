@@ -87,19 +87,19 @@ function BellModel({ bell, impulse }: { bell: Bell; impulse: BellImpulse }) {
   const ribbonColor = bell.decoration === "ribbon" ? bell.finish.trim : "#8f1627";
   const ribbon = showRibbon ? (
     <group position={[0, 1.78, 0.12]}>
-      <mesh position={[-0.54, 0.05, 0]} rotation-z={0.22} castShadow>
-        <sphereGeometry args={[0.62, 20, 12]} />
+      <mesh position={[-0.48, 0.05, 0]} rotation-z={0.22} scale={[1, 0.45, 0.18]} castShadow>
+        <sphereGeometry args={[0.62, 28, 18]} />
         <meshPhysicalMaterial color={ribbonColor} roughness={0.48} metalness={0.05} />
       </mesh>
-      <mesh position={[0.54, 0.05, 0]} rotation-z={-0.22} castShadow>
-        <sphereGeometry args={[0.62, 20, 12]} />
+      <mesh position={[0.48, 0.05, 0]} rotation-z={-0.22} scale={[1, 0.45, 0.18]} castShadow>
+        <sphereGeometry args={[0.62, 28, 18]} />
         <meshPhysicalMaterial color={ribbonColor} roughness={0.48} metalness={0.05} />
       </mesh>
-      <mesh position={[-0.32, -0.48, -0.02]} rotation-z={-0.32} castShadow>
+      <mesh position={[-0.3, -0.48, -0.07]} rotation-z={-0.32} castShadow>
         <boxGeometry args={[0.24, 1.15, 0.1]} />
         <meshPhysicalMaterial color={ribbonColor} roughness={0.5} />
       </mesh>
-      <mesh position={[0.32, -0.48, -0.02]} rotation-z={0.32} castShadow>
+      <mesh position={[0.3, -0.48, -0.07]} rotation-z={0.32} castShadow>
         <boxGeometry args={[0.24, 1.15, 0.1]} />
         <meshPhysicalMaterial color={ribbonColor} roughness={0.5} />
       </mesh>
