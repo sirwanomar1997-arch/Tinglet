@@ -29,7 +29,7 @@ export const Route = createFileRoute("/")({
 });
 
 function HomePage() {
-  const { bell, volume, haptics, shakeEnabled } = useAppState();
+  const { t, bell, volume, haptics, shakeEnabled } = useAppState();
   const [glow, setGlow] = useState(0);
   const rotation = useMotionValue(0);
   const smoothRotation = useSpring(rotation, { stiffness: 320, damping: 24, mass: 0.55 });
@@ -43,22 +43,42 @@ function HomePage() {
     setGlow((g) => g + 1);
   }, [bell.tone, haptics, rotation, volume]);
 
-  const { requestPermission } = useShake(ring, shakeEnabled);
+  const { permission, requestPermission } = useShake(ring, shakeEnabled);
 
   useEffect(() => {
+    // iOS only grants motion access from a direct, synchronous user gesture,
+    // and it must run on the top-level document (not inside a preview
+    // iframe). Keep listening — rather than a one-shot listener — so a tap
+    // that lands on a non-propagating control still gets a retry, and so we
+    // keep asking until permission is actually granted.
+    if (!shakeEnabled || permission === "granted" || permission === "unsupported") return;
     const prepare = () => {
       void unlockAudio();
       void requestPermission();
     };
-    // Capture the first touch anywhere before another control can stop the
-    // event. iOS requires this direct gesture for motion and audio permission.
-    window.addEventListener("pointerdown", prepare, { once: true, capture: true });
-    return () => window.removeEventListener("pointerdown", prepare, { capture: true });
-  }, [requestPermission]);
+    window.addEventListener("pointerdown", prepare, { capture: true });
+    window.addEventListener("touchend", prepare, { capture: true });
+    return () => {
+      window.removeEventListener("pointerdown", prepare, { capture: true });
+      window.removeEventListener("touchend", prepare, { capture: true });
+    };
+  }, [permission, requestPermission, shakeEnabled]);
 
   return (
     <main className="relative flex min-h-[calc(100svh-5.25rem)] flex-col overflow-hidden pb-2">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_50%_42%,color-mix(in_oklab,var(--stage-glow)_88%,transparent),transparent_54%)]" />
+      {shakeEnabled && permission === "needs-permission" && (
+        <button
+          type="button"
+          onClick={() => {
+            void unlockAudio();
+            void requestPermission();
+          }}
+          className="absolute inset-x-4 top-4 z-10 rounded-2xl border border-[color:var(--gilt)]/40 bg-background/70 px-4 py-3 text-center text-sm text-foreground/85 backdrop-blur-md"
+        >
+          {t("enableShake")}
+        </button>
+      )}
       <div className="relative flex flex-1 flex-col items-center justify-center">
         <div className="relative h-[min(78svh,46rem)] w-full max-w-[34rem]" aria-hidden="true">
           <motion.span
