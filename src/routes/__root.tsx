@@ -11,6 +11,9 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { AppStateProvider, useAppState } from "../lib/app-state";
+import { BackgroundLayer } from "../components/BackgroundLayer";
+import { TabBar } from "../components/TabBar";
 
 function NotFoundComponent() {
   return (
@@ -128,13 +131,27 @@ function RootShell({ children }: { children: ReactNode }) {
   );
 }
 
+function AppChrome() {
+  const { background } = useAppState();
+
+  return (
+    <>
+      <BackgroundLayer background={background} />
+      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+      <Outlet />
+      <TabBar />
+    </>
+  );
+}
+
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
+      <AppStateProvider>
+        <AppChrome />
+      </AppStateProvider>
     </QueryClientProvider>
   );
 }
