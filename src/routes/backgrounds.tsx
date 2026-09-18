@@ -18,6 +18,8 @@ export const Route = createFileRoute("/backgrounds")({
           "Pick a background for your bell: soft gradients, marble and stone, nature, minimal colours, festive scenes and dark moody tones.",
       },
       { property: "og:title", content: "Backgrounds — Elegant Hand Bell" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       {
         property: "og:description",
         content: "Choose a beautiful background. Applied instantly and remembered.",
