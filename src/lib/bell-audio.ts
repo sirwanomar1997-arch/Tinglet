@@ -83,7 +83,6 @@ export function ringBell(tone: Tone, volume = 1, intensity = 0.7): void {
   bus.disconnect();
   bus.connect(warmth);
   warmth.connect(master);
-  bus.connect(master);
 
   strikeNoise(context, bus, now, 0.04 + force * 0.055);
 

@@ -28,7 +28,7 @@ export const Route = createFileRoute("/")({
 });
 
 function HomePage() {
-  const { bell, background, volume, haptics, shakeEnabled, t, lang } = useAppState();
+  const { bell, volume, haptics, shakeEnabled } = useAppState();
   const controls = useAnimationControls();
   const [clapper, setClapper] = useState(0);
   const [glow, setGlow] = useState(0);
@@ -77,7 +77,6 @@ function HomePage() {
           <motion.div
             animate={controls}
             style={{ transformOrigin: "50% 12%" }}
-            whileTap={{ scale: 0.97 }}
             className="w-full drop-shadow-[0_36px_34px_color-mix(in_oklab,var(--background)_65%,transparent)]"
           >
             <BellArt bell={bell} clapperOffset={clapper} className="h-auto w-full" />
