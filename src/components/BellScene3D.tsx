@@ -1,4 +1,4 @@
-import { ContactShadows, Environment, Lightformer } from "@react-three/drei";
+import { ContactShadows, Environment, Lightformer, RoundedBox } from "@react-three/drei";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
@@ -12,7 +12,7 @@ export type BellImpulse = {
 };
 
 const PROFILES: Record<BellShape, Array<[number, number]>> = {
-  classic: [[0.12, 1.45], [0.58, 1.42], [0.72, 1.08], [0.84, 0.45], [1.12, -0.55], [1.48, -1.25], [1.62, -1.45]],
+  classic: [[0.08, 1.48], [0.34, 1.47], [0.58, 1.38], [0.7, 1.08], [0.76, 0.58], [0.89, 0.02], [1.12, -0.58], [1.43, -1.18], [1.61, -1.39], [1.64, -1.47]],
   slim: [[0.1, 1.6], [0.46, 1.55], [0.58, 0.9], [0.7, 0.05], [1.02, -1.1], [1.3, -1.42]],
   dome: [[0.12, 1.25], [0.8, 1.22], [1.15, 0.82], [1.36, 0.1], [1.48, -0.85], [1.58, -1.35]],
   tulip: [[0.1, 1.48], [0.46, 1.44], [0.72, 0.88], [0.78, 0.12], [1.04, -0.72], [1.55, -1.42]],
@@ -60,9 +60,18 @@ function BellModel({ bell, impulse }: { bell: Bell; impulse: BellImpulse }) {
   const material = {
     color: bell.finish.stops[1],
     metalness: bell.id === "ivoire" ? 0.08 : 0.92,
-    roughness: bell.id === "ivoire" ? 0.16 : 0.17,
+    roughness: bell.id === "ivoire" ? 0.13 : 0.12,
+    clearcoat: 1,
+    clearcoatRoughness: 0.07,
+    envMapIntensity: 1.35,
+  };
+
+  const velvet = {
+    color: bell.decoration === "ribbon" ? bell.finish.trim : "#b3132f",
+    roughness: 0.24,
+    metalness: 0.08,
     clearcoat: 0.72,
-    clearcoatRoughness: 0.12,
+    clearcoatRoughness: 0.18,
   };
 
   const handle = bell.handle === "loop" ? (
@@ -84,28 +93,25 @@ function BellModel({ bell, impulse }: { bell: Bell; impulse: BellImpulse }) {
   );
 
   const showRibbon = bell.decoration === "ribbon" || bell.id === "aurum";
-  const ribbonColor = bell.decoration === "ribbon" ? bell.finish.trim : "#8f1627";
   const ribbon = showRibbon ? (
-    <group position={[0, 1.78, 0.12]}>
-      <mesh position={[-0.48, 0.05, 0]} rotation-z={0.22} scale={[1, 0.45, 0.18]} castShadow>
-        <sphereGeometry args={[0.62, 28, 18]} />
-        <meshPhysicalMaterial color={ribbonColor} roughness={0.48} metalness={0.05} />
+    <group position={[0, 1.77, 0.16]}>
+      <mesh position={[-0.47, 0.05, 0]} rotation={[Math.PI / 2, 0.08, 0.2]} scale={[1.12, 0.66, 1]} castShadow>
+        <torusGeometry args={[0.3, 0.15, 24, 64]} />
+        <meshPhysicalMaterial {...velvet} />
       </mesh>
-      <mesh position={[0.48, 0.05, 0]} rotation-z={-0.22} scale={[1, 0.45, 0.18]} castShadow>
-        <sphereGeometry args={[0.62, 28, 18]} />
-        <meshPhysicalMaterial color={ribbonColor} roughness={0.48} metalness={0.05} />
+      <mesh position={[0.47, 0.05, 0]} rotation={[Math.PI / 2, -0.08, -0.2]} scale={[1.12, 0.66, 1]} castShadow>
+        <torusGeometry args={[0.3, 0.15, 24, 64]} />
+        <meshPhysicalMaterial {...velvet} />
       </mesh>
-      <mesh position={[-0.3, -0.48, -0.07]} rotation-z={-0.32} castShadow>
-        <boxGeometry args={[0.24, 1.15, 0.1]} />
-        <meshPhysicalMaterial color={ribbonColor} roughness={0.5} />
-      </mesh>
-      <mesh position={[0.3, -0.48, -0.07]} rotation-z={0.32} castShadow>
-        <boxGeometry args={[0.24, 1.15, 0.1]} />
-        <meshPhysicalMaterial color={ribbonColor} roughness={0.5} />
-      </mesh>
+      <RoundedBox args={[0.27, 1.2, 0.09]} radius={0.08} smoothness={5} position={[-0.31, -0.51, -0.07]} rotation-z={-0.33} castShadow>
+        <meshPhysicalMaterial {...velvet} />
+      </RoundedBox>
+      <RoundedBox args={[0.27, 1.2, 0.09]} radius={0.08} smoothness={5} position={[0.31, -0.51, -0.07]} rotation-z={0.33} castShadow>
+        <meshPhysicalMaterial {...velvet} />
+      </RoundedBox>
       <mesh position={[0, 0.02, 0.2]} castShadow>
-        <sphereGeometry args={[0.24, 24, 16]} />
-        <meshPhysicalMaterial color={ribbonColor} roughness={0.38} />
+        <sphereGeometry args={[0.22, 40, 28]} />
+        <meshPhysicalMaterial {...velvet} roughness={0.2} />
       </mesh>
     </group>
   ) : null;
@@ -114,7 +120,7 @@ function BellModel({ bell, impulse }: { bell: Bell; impulse: BellImpulse }) {
     <group ref={pivot} position={[0, 2.2, 0]}>
       <group position={[0, -1.05, 0]}>
         <mesh castShadow receiveShadow>
-          <latheGeometry args={[profile, bell.shape === "faceted" ? 12 : 64]} />
+          <latheGeometry args={[profile, bell.shape === "faceted" ? 16 : 96]} />
           <meshPhysicalMaterial {...material} side={THREE.DoubleSide} />
         </mesh>
         <mesh position={[0, -1.42, 0]} rotation-x={Math.PI / 2} castShadow>
@@ -127,13 +133,13 @@ function BellModel({ bell, impulse }: { bell: Bell; impulse: BellImpulse }) {
         </mesh>
         {bell.band && (
           <group>
-            <mesh position={[0, -1.02, 0]} rotation-x={Math.PI / 2}>
-              <torusGeometry args={[1.34, 0.025, 12, 64]} />
-              <meshPhysicalMaterial color={bell.finish.highlight} metalness={0.88} roughness={0.12} />
+            <mesh position={[0, -1.02, 0]} rotation-x={Math.PI / 2} castShadow>
+              <torusGeometry args={[1.35, 0.055, 20, 96]} />
+              <meshPhysicalMaterial color={bell.finish.highlight} metalness={0.88} roughness={0.1} clearcoat={1} />
             </mesh>
-            <mesh position={[0, -1.16, 0]} rotation-x={Math.PI / 2}>
-              <torusGeometry args={[1.4, 0.035, 12, 64]} />
-              <meshPhysicalMaterial color={bell.finish.stops[2]} metalness={0.9} roughness={0.16} />
+            <mesh position={[0, -1.18, 0]} rotation-x={Math.PI / 2} castShadow>
+              <torusGeometry args={[1.43, 0.045, 20, 96]} />
+              <meshPhysicalMaterial color={bell.finish.stops[2]} metalness={0.9} roughness={0.1} clearcoat={1} />
             </mesh>
           </group>
         )}
@@ -163,21 +169,22 @@ export function BellScene3D({ bell, impulse }: { bell: Bell; impulse: BellImpuls
     <div className="h-full w-full" aria-hidden="true">
       <Canvas
         shadows
-        dpr={[1, 1.75]}
-        camera={{ position: [0, 0.6, 11.5], fov: 38 }}
+        dpr={[1, 2]}
+        camera={{ position: [0, 0.45, 10.8], fov: 39 }}
         gl={{ antialias: true, alpha: true }}
       >
-        <ambientLight intensity={0.55} />
-        <directionalLight position={[-4, 7, 6]} intensity={3.2} color={bell.finish.highlight} castShadow shadow-mapSize={[1024, 1024]} />
-        <pointLight position={[4, 1, 5]} intensity={30} color={bell.finish.accent} distance={11} />
-        <pointLight position={[-4, -2, 3]} intensity={13} color={bell.finish.stops[0]} distance={9} />
-        <Environment resolution={128}>
-          <Lightformer intensity={4} color={bell.finish.highlight} position={[-4, 3, 4]} scale={[3, 7, 1]} />
-          <Lightformer intensity={2.4} color={bell.finish.accent} position={[4, 1, 2]} rotation-y={-Math.PI / 2} scale={[5, 2, 1]} />
-          <Lightformer intensity={1.2} color={bell.finish.stops[2]} position={[0, -4, 3]} scale={[8, 2, 1]} />
+        <ambientLight intensity={0.42} />
+        <directionalLight position={[-4, 7, 6]} intensity={2.8} color={bell.finish.highlight} castShadow shadow-mapSize={[1024, 1024]} />
+        <pointLight position={[3.8, 1.5, 5]} intensity={24} color={bell.finish.accent} distance={12} />
+        <pointLight position={[-3.5, -1, 4]} intensity={10} color={bell.finish.stops[0]} distance={10} />
+        <pointLight position={[0, 4, 1]} intensity={9} color={bell.finish.highlight} distance={8} />
+        <Environment resolution={256}>
+          <Lightformer intensity={5} color={bell.finish.highlight} position={[-4, 3, 4]} scale={[2, 8, 1]} />
+          <Lightformer intensity={3} color={bell.finish.accent} position={[4, 1, 2]} rotation-y={-Math.PI / 2} scale={[6, 2, 1]} />
+          <Lightformer intensity={1.6} color={bell.finish.stops[2]} position={[0, -4, 3]} scale={[8, 2, 1]} />
         </Environment>
         <BellModel bell={bell} impulse={impulse} />
-        <ContactShadows position={[0, -2.72, 0]} opacity={0.42} scale={7} blur={2.8} far={7} />
+        <ContactShadows position={[0, -2.72, 0]} opacity={0.28} scale={7} blur={3.5} far={7} />
       </Canvas>
     </div>
   );
