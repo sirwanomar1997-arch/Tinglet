@@ -5,18 +5,18 @@ import { motion } from "motion/react";
 import { Button } from "@/components/ui/button";
 import { useAppState } from "@/lib/app-state";
 import { ringBell, unlockAudio, vibrate } from "@/lib/bell-audio";
-import { PACKS, bellsByPack, type Bell } from "@/lib/bells";
+import { BELLS, FREE_BELL_IDS, PACKS, isPremiumBell, type Bell } from "@/lib/bells";
 
 export const Route = createFileRoute("/bells")({
   head: () => ({
     meta: [
-      { title: "Bell Collection — Elegant Hand Bell" },
+      { title: "Bell Collection — Tringlet" },
       {
         name: "description",
         content:
           "Browse the bell collection: gold, rose gold, silver, porcelain and onyx bells, plus seasonal Christmas, spring, autumn and Halloween packs.",
       },
-      { property: "og:title", content: "Bell Collection — Elegant Hand Bell" },
+      { property: "og:title", content: "Bell Collection — Tringlet" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       {
@@ -79,6 +79,7 @@ function BellCard({ bell, locked }: { bell: Bell; locked: boolean }) {
 function BellsPage() {
   const { t, lang, isUnlocked, unlockPack, haptics } = useAppState();
   const premiumUnlocked = isUnlocked("christmas");
+  const freeBells = BELLS.filter((bell) => (FREE_BELL_IDS as readonly string[]).includes(bell.id));
 
   const unlockPremium = () => {
     unlockPack("christmas");
@@ -100,7 +101,7 @@ function BellsPage() {
               <p className="text-[11px] uppercase tracking-[0.22em] text-muted-foreground">{t("included")}</p>
             </div>
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
-              {bellsByPack("classic").map((bell) => <BellCard key={bell.id} bell={bell} locked={false} />)}
+              {freeBells.map((bell) => <BellCard key={bell.id} bell={bell} locked={false} />)}
             </div>
           </section>
 
@@ -123,9 +124,9 @@ function BellsPage() {
             </section>
           )}
 
-          {PACKS.filter((pack) => pack.premium).map((pack) => {
-          const unlocked = isUnlocked(pack.id);
-          const bells = bellsByPack(pack.id);
+          {PACKS.map((pack) => {
+          const unlocked = premiumUnlocked;
+          const bells = BELLS.filter((bell) => bell.pack === pack.id && isPremiumBell(bell.id));
           if (bells.length === 0) return null;
 
           return (
