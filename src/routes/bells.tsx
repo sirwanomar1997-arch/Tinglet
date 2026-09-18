@@ -108,9 +108,55 @@ function CollectionPage() {
   const premiumBells = BELLS.filter((item) => isPremiumBell(item.id));
   const premiumBackgrounds = BACKGROUNDS.filter((item) => isPremiumBackground(item.id));
 
-  const unlockPremium = () => {
+  const [busy, setBusy] = useState(false);
+
+  const grant = () => {
     unlockPack("christmas");
     if (haptics) vibrate([8, 30, 8]);
+  };
+
+  const handleOutcome = (outcome: PurchaseOutcome) => {
+    switch (outcome.status) {
+      case "purchased":
+        grant();
+        toast.success(t("purchaseThanks"));
+        return;
+      case "restored":
+        grant();
+        toast.success(t("purchaseRestored"));
+        return;
+      case "demo":
+        grant();
+        toast.message(t("purchaseDemo"));
+        return;
+      case "cancelled":
+        return;
+      case "unavailable":
+        toast.error(t("purchaseNotFound"));
+        return;
+      default:
+        toast.error(t("purchaseFailed"));
+    }
+  };
+
+  const unlockPremium = async () => {
+    if (busy) return;
+    setBusy(true);
+    try {
+      handleOutcome(await buyPremium());
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const restorePremium = async () => {
+    if (busy) return;
+    setBusy(true);
+    try {
+      handleOutcome(await restorePurchase());
+    } finally {
+      setBusy(false);
+    }
   };
 
   if (!catalogOpen) {
