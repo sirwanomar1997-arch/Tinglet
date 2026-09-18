@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { motion } from "motion/react";
 import { useCallback, useState } from "react";
 
-import { BellScene3D, type BellImpulse } from "@/components/BellScene3D";
+import signatureGoldBell from "@/assets/signature-gold-bell.png";
 import { ringBell, unlockAudio, vibrate } from "@/lib/bell-audio";
 import { useAppState } from "@/lib/app-state";
 import { useShake } from "@/lib/use-shake";
@@ -30,7 +30,7 @@ export const Route = createFileRoute("/")({
 function HomePage() {
   const { bell, volume, haptics, shakeEnabled } = useAppState();
   const [glow, setGlow] = useState(0);
-  const [impulse, setImpulse] = useState<BellImpulse>({ id: 0, intensity: 0, direction: 1 });
+  const [impulse, setImpulse] = useState({ id: 0, intensity: 0, direction: 1 });
 
   const ring = useCallback(({ intensity, x }: { intensity: number; x: number }) => {
     void unlockAudio();
@@ -59,7 +59,17 @@ function HomePage() {
             animate={{ opacity: 0, scale: 1.35 }}
             transition={{ duration: 1.1, ease: "easeOut" }}
           />
-          <BellScene3D bell={bell} impulse={impulse} />
+          <motion.img
+            key={impulse.id}
+            src={signatureGoldBell}
+            alt=""
+            width={1024}
+            height={1280}
+            className="absolute inset-0 m-auto h-auto w-[92%] max-h-full object-contain drop-shadow-[0_24px_22px_color-mix(in_oklab,var(--foreground)_22%,transparent)]"
+            initial={{ rotate: impulse.direction * impulse.intensity * 8, x: impulse.direction * impulse.intensity * 8 }}
+            animate={{ rotate: [impulse.direction * impulse.intensity * 8, -impulse.direction * impulse.intensity * 5, impulse.direction * impulse.intensity * 2, 0], x: 0 }}
+            transition={{ duration: 0.58, ease: [0.22, 0.8, 0.3, 1] }}
+          />
         </div>
       </div>
     </main>
