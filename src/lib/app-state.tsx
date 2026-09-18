@@ -12,6 +12,7 @@ import {
   DEFAULT_BELL_ID,
   getBell,
   PREMIUM_PACK_IDS,
+  isPremiumBell,
   type PackId,
   type Bell,
 } from "./bells";
@@ -28,7 +29,7 @@ type Persisted = {
   lang: Lang | null;
 };
 
-const STORAGE_KEY = "elegant-hand-bell:v1";
+const STORAGE_KEY = "tringlet:v1";
 
 const defaults: Persisted = {
   bellId: DEFAULT_BELL_ID,
@@ -53,6 +54,7 @@ type AppState = {
   setBackground: (id: string) => void;
   unlockPack: (pack: PackId) => void;
   isUnlocked: (pack: PackId) => boolean;
+  isBellUnlocked: (id: string) => boolean;
   setVolume: (v: number) => void;
   setHaptics: (v: boolean) => void;
   setShakeEnabled: (v: boolean) => void;
@@ -109,7 +111,10 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       haptics: state.haptics,
       shakeEnabled: state.shakeEnabled,
       lang,
-      setBell: (id) => patch({ bellId: id }),
+      setBell: (id) => {
+        if (isPremiumBell(id) && state.unlocked.length === 0) return;
+        patch({ bellId: id });
+      },
       setBackground: (id) => patch({ backgroundId: id }),
       unlockPack: () =>
         setState((prev) => ({
@@ -117,6 +122,7 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
           unlocked: Array.from(new Set([...prev.unlocked, ...PREMIUM_PACK_IDS])),
         })),
       isUnlocked: (pack) => pack === "classic" || state.unlocked.includes(pack),
+      isBellUnlocked: (id) => !isPremiumBell(id) || state.unlocked.length > 0,
       setVolume: (v) => patch({ volume: v }),
       setHaptics: (v) => patch({ haptics: v }),
       setShakeEnabled: (v) => patch({ shakeEnabled: v }),

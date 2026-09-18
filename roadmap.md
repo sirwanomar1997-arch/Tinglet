@@ -1,5 +1,11 @@
 ## Current request
-- [x] Match all 70 bell assets to free-01 quality: sharp edges, no halos, same visible scale
-- [x] Make physical phone shake-to-ring reliable
-- [x] Verify mobile home, bell catalogue, and shaking flow
-- [x] Publish the finished app
+- [x] Replace all 69 non-reference bells with individually rendered high-resolution assets
+- [x] Normalize transparent canvas and scale to match free-01 without enlarging low-resolution pixels
+- [x] Audit every bell for white/grey fringe, blur, missing details, and inconsistent scale
+- [x] Verify representative bells on pale and dark app backgrounds at mobile size
+- [x] Rename the app and all visible metadata to Tringlet
+- [x] Keep exactly 5 free bells and 5 free backgrounds
+- [x] Put every remaining bell and background in one 20 SEK premium unlock
+- [x] Replace dominant backgrounds with calm, bell-friendly seasonal and luxury scenes inspired by the references
+- [x] Prepare a new Tringlet Lovable web address when publishing
+- [ ] Publish only after the complete collection passes

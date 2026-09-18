@@ -1,7 +1,7 @@
 export type Lang = "en" | "sv";
 
 const dict = {
-  appName: { en: "Elegant Hand Bell", sv: "Elegant Handklocka" },
+  appName: { en: "Tringlet", sv: "Tringlet" },
   home: { en: "Home", sv: "Hem" },
   bells: { en: "Bells", sv: "Klockor" },
   backgrounds: { en: "Backgrounds", sv: "Bakgrunder" },
@@ -30,7 +30,7 @@ const dict = {
   locked: { en: "Locked", sv: "Låst" },
   unlock: { en: "Unlock", sv: "Lås upp" },
   unlockPack: { en: "Unlock pack", sv: "Lås upp paket" },
-  unlockPremium: { en: "Unlock all 40 · SEK 20", sv: "Lås upp alla 40 · 20 kr" },
+  unlockPremium: { en: "Unlock everything · SEK 20", sv: "Lås upp allt · 20 kr" },
   premiumBundle: {
     en: "One purchase unlocks every premium design.",
     sv: "Ett köp låser upp alla premiumdesigner.",
@@ -38,15 +38,15 @@ const dict = {
   restorePurchase: { en: "Restore purchase", sv: "Återställ köp" },
   unlocked: { en: "Unlocked", sv: "Upplåst" },
   packUnlocked: { en: "Pack unlocked", sv: "Paketet är upplåst" },
-  freeForNow: { en: "40 designs · one purchase", sv: "40 designer · ett köp" },
-  freeCollection: { en: "30 free bells", sv: "30 gratis klockor" },
+  freeForNow: { en: "One purchase", sv: "Ett köp" },
+  freeCollection: { en: "5 free bells", sv: "5 gratis klockor" },
   premiumCollection: { en: "Premium bells", sv: "Premiumklockor" },
-  premiumCollectionSub: { en: "40 designs · one purchase · SEK 20", sv: "40 designer · ett köp · 20 kr" },
+  premiumCollectionSub: { en: "65 bells · one purchase · SEK 20", sv: "65 klockor · ett köp · 20 kr" },
   viewCollection: { en: "View collection", sv: "Visa samlingen" },
   closeCollection: { en: "Back to collections", sv: "Tillbaka till samlingar" },
-  freeBackgrounds: { en: "10 free backgrounds", sv: "10 gratis bakgrunder" },
+  freeBackgrounds: { en: "5 free backgrounds", sv: "5 gratis bakgrunder" },
   deluxeBackgrounds: { en: "Deluxe backgrounds", sv: "Deluxebakgrunder" },
-  deluxeBackgroundsSub: { en: "30 exclusive backgrounds", sv: "30 exklusiva bakgrunder" },
+  deluxeBackgroundsSub: { en: "30 exclusive backgrounds · included in Premium", sv: "30 exklusiva bakgrunder · ingår i Premium" },
   preview: { en: "Preview", sv: "Förhandslyssna" },
   currentBell: { en: "Current bell", sv: "Vald klocka" },
   done: { en: "Done", sv: "Klar" },
