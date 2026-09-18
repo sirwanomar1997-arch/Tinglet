@@ -64,11 +64,20 @@ export function useShake(onShake: (impulse: ShakeImpulse) => void, enabled: bool
       const x = a.x ?? 0;
       const y = a.y ?? 0;
       const z = a.z ?? 0;
-      const change = Math.hypot(x - previous.current.x, y - previous.current.y, z - previous.current.z);
-      previous.current = { x, y, z };
       const now = performance.now();
-      const dt = Math.min(0.05, Math.max(0.008, (now - (lastTime.current || now - 16)) / 1000));
+      const elapsedMs = Math.min(50, Math.max(5, now - (lastTime.current || now - 16.67)));
+      const dt = elapsedMs / 1000;
       lastTime.current = now;
+
+      // Normalize sensor change to a 60 Hz baseline. Newer phones often emit
+      // many small samples, while older phones emit fewer, larger samples.
+      const rawChange = Math.hypot(
+        x - previous.current.x,
+        y - previous.current.y,
+        z - previous.current.z,
+      );
+      const change = rawChange * Math.min(2.6, Math.max(0.55, 16.67 / elapsedMs));
+      previous.current = { x, y, z };
 
       // Follow the hand continuously: filtered lateral acceleration drives a
       // damped pendulum, rather than replaying a canned animation.
@@ -80,16 +89,20 @@ export function useShake(onShake: (impulse: ShakeImpulse) => void, enabled: bool
       velocity.current *= Math.exp(-3.4 * dt);
       angle.current = Math.max(-17, Math.min(17, angle.current + velocity.current * 58 * dt));
 
-      const direction = Math.sign(drive);
+      const dominant = Math.abs(x) >= Math.abs(y) && Math.abs(x) >= Math.abs(z)
+        ? x
+        : Math.abs(y) >= Math.abs(z)
+          ? y
+          : z;
+      const direction = Math.sign(dominant);
+      const reversed = direction !== 0 && direction !== lastDirection.current;
       const impact =
-        change > 3.1 &&
-        direction !== 0 &&
-        direction !== lastDirection.current &&
-        now - lastRing.current > 72;
+        change > (reversed ? 1.35 : 3.4) &&
+        now - lastRing.current > 92;
       if (impact) lastRing.current = now;
-      if (direction !== 0 && Math.abs(drive) > 1.2) lastDirection.current = direction;
+      if (direction !== 0 && Math.abs(dominant) > 0.75) lastDirection.current = direction;
       handler.current({
-        intensity: Math.min(1, Math.max(0.08, change / 18)),
+        intensity: Math.min(1, Math.max(0.12, change / 11)),
         x: Math.max(-1, Math.min(1, x / 16)),
         y: Math.max(-1, Math.min(1, y / 16)),
         angle: angle.current,
