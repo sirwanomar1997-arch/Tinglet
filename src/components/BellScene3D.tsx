@@ -95,11 +95,11 @@ function BellModel({ bell, impulse }: { bell: Bell; impulse: BellImpulse }) {
   const showRibbon = bell.decoration === "ribbon" || bell.id === "aurum";
   const ribbon = showRibbon ? (
     <group position={[0, 1.77, 0.16]}>
-      <mesh position={[-0.47, 0.05, 0]} rotation={[Math.PI / 2, 0.08, 0.2]} scale={[1.12, 0.66, 1]} castShadow>
+      <mesh position={[-0.45, 0.05, 0]} rotation-z={0.16} scale={[1.18, 0.72, 0.42]} castShadow>
         <torusGeometry args={[0.3, 0.15, 24, 64]} />
         <meshPhysicalMaterial {...velvet} />
       </mesh>
-      <mesh position={[0.47, 0.05, 0]} rotation={[Math.PI / 2, -0.08, -0.2]} scale={[1.12, 0.66, 1]} castShadow>
+      <mesh position={[0.45, 0.05, 0]} rotation-z={-0.16} scale={[1.18, 0.72, 0.42]} castShadow>
         <torusGeometry args={[0.3, 0.15, 24, 64]} />
         <meshPhysicalMaterial {...velvet} />
       </mesh>
