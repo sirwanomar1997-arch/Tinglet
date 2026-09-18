@@ -333,7 +333,8 @@ const DELUXE_BACKGROUNDS: Background[] = [
 ];
 
 DELUXE_BACKGROUNDS.forEach((background) => {
-  background.asset = DELUXE_BACKGROUND_IMAGES[background.id];
+  const asset = DELUXE_BACKGROUND_IMAGES[background.id];
+  if (asset) background.asset = asset;
 });
 
 const freeBackgrounds = BACKGROUNDS.filter((background) =>
