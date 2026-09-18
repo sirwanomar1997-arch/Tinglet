@@ -9,6 +9,8 @@ import { useAppState } from "@/lib/app-state";
 import { ringBell, unlockAudio, vibrate } from "@/lib/bell-audio";
 import { BACKGROUNDS, isPremiumBackground, type Background } from "@/lib/backgrounds";
 import { BELLS, isPremiumBell, type Bell } from "@/lib/bells";
+import { buyPremium, restorePremium as restorePurchase, type PurchaseOutcome } from "@/lib/purchases";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/bells")({
   head: () => ({
