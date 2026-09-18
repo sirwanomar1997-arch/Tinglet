@@ -71,6 +71,7 @@ function BellsPage() {
 
   return (
     <main className="min-h-screen px-5 pb-32 pt-[max(1.5rem,env(safe-area-inset-top))]">
+      <div className="pointer-events-none fixed inset-0 -z-10 bg-[#0d0e10]/82 backdrop-blur-2xl" />
       <header className="mb-7">
         <h1 className="font-serif text-3xl text-white">{t("chooseBell")}</h1>
         <p className="mt-1.5 text-sm text-white/50">{t("chooseBellSub")}</p>

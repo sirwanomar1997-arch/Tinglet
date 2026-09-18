@@ -99,13 +99,13 @@ function Handle({
   if (kind === "stem") {
     return (
       <g>
-        <ellipse cx={120} cy={topY - 74} rx={10} ry={10} fill={accent} />
+        <ellipse cx={120} cy={topY - 50} rx={10} ry={10} fill={accent} />
         <path
-          d={`M112 ${topY - 68} C108 ${topY - 44} 108 ${topY - 26} 110 ${topY - 6} L130 ${topY - 6} C132 ${topY - 26} 132 ${topY - 44} 128 ${topY - 68} Z`}
+          d={`M112 ${topY - 46} C108 ${topY - 32} 108 ${topY - 20} 110 ${topY - 6} L130 ${topY - 6} C132 ${topY - 20} 132 ${topY - 32} 128 ${topY - 46} Z`}
           fill={accent}
         />
         <path
-          d={`M116 ${topY - 64} C113 ${topY - 42} 113 ${topY - 24} 115 ${topY - 8}`}
+          d={`M116 ${topY - 43} C113 ${topY - 30} 113 ${topY - 18} 115 ${topY - 8}`}
           stroke={light}
           strokeWidth={3}
           opacity={0.55}
@@ -117,9 +117,9 @@ function Handle({
   }
   return (
     <g>
-      <path d={`M120 ${topY - 56} L131 ${topY - 26} L109 ${topY - 26} Z`} fill={accent} />
-      <ellipse cx={120} cy={topY - 58} rx={7} ry={7} fill={accent} />
-      <ellipse cx={120} cy={topY - 20} rx={14} ry={8} fill={accent} />
+      <path d={`M120 ${topY - 48} L131 ${topY - 22} L109 ${topY - 22} Z`} fill={accent} />
+      <ellipse cx={120} cy={topY - 50} rx={7} ry={7} fill={accent} />
+      <ellipse cx={120} cy={topY - 18} rx={14} ry={8} fill={accent} />
       <ellipse cx={120} cy={topY - 5} rx={18} ry={9} fill={accent} />
     </g>
   );
