@@ -1,7 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { ArrowLeft, Check, FolderLock, Lock, Sparkles } from "lucide-react";
+import { Check, FolderLock, Lock, Sparkles } from "lucide-react";
 import { motion } from "motion/react";
-import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { useAppState } from "@/lib/app-state";
@@ -74,7 +73,6 @@ function BellCard({ bell, locked }: { bell: Bell; locked: boolean }) {
 function BellsPage() {
   const { t, lang, isUnlocked, unlockPack, haptics } = useAppState();
   const premiumUnlocked = isUnlocked("christmas");
-  const [showPremium, setShowPremium] = useState(false);
 
   const unlockPremium = () => {
     unlockPack("christmas");
@@ -89,8 +87,7 @@ function BellsPage() {
         <p className="mt-1.5 text-sm text-muted-foreground">{t("chooseBellSub")}</p>
       </header>
 
-      {!showPremium ? (
-        <div className="space-y-9">
+      <div className="space-y-9">
           <section>
             <div className="mb-3">
               <h2 className="font-serif text-xl text-foreground/90">{t("freeCollection")}</h2>
@@ -101,27 +98,15 @@ function BellsPage() {
             </div>
           </section>
 
-          <button
-            onPointerUp={() => setShowPremium(true)}
-            onClick={() => setShowPremium(true)}
-            className="relative flex w-full items-center gap-5 overflow-hidden rounded-xl border border-primary/30 bg-card p-5 text-left shadow-[0_18px_38px_color-mix(in_oklab,var(--foreground)_12%,transparent)]"
-          >
-            <span className="flex size-14 shrink-0 items-center justify-center rounded-full bg-secondary text-primary"><FolderLock className="size-6" /></span>
-            <span className="min-w-0 flex-1">
-              <span className="block font-serif text-2xl text-foreground">{t("premiumCollection")}</span>
-              <span className="mt-1 block text-[11px] uppercase tracking-[0.17em] text-muted-foreground">{t("premiumCollectionSub")}</span>
-            </span>
-            <span className="font-serif text-xl text-primary">›</span>
-          </button>
-        </div>
-      ) : (
-        <div className="space-y-8">
-          <Button variant="ghost" onClick={() => setShowPremium(false)} className="-ml-3 text-muted-foreground">
-            <ArrowLeft /> {t("closeCollection")}
-          </Button>
+          <details className="group space-y-8">
+            <summary className="relative flex w-full cursor-pointer list-none items-center gap-5 overflow-hidden rounded-xl border border-primary/30 bg-card p-5 text-left shadow-[0_18px_38px_color-mix(in_oklab,var(--foreground)_12%,transparent)] [&::-webkit-details-marker]:hidden">
+              <span className="flex size-14 shrink-0 items-center justify-center rounded-full bg-secondary text-primary"><FolderLock className="size-6" /></span>
+              <span className="min-w-0 flex-1"><span className="block font-serif text-2xl text-foreground">{t("premiumCollection")}</span><span className="mt-1 block text-[11px] uppercase tracking-[0.17em] text-muted-foreground">{t("premiumCollectionSub")}</span></span>
+              <span className="font-serif text-xl text-primary transition-transform group-open:rotate-90">›</span>
+            </summary>
 
           {!premiumUnlocked && (
-            <section className="border-y border-border bg-card/55 px-1 py-5">
+            <section className="mt-8 border-y border-border bg-card/55 px-1 py-5">
               <p className="font-serif text-xl text-foreground">{t("premiumBundle")}</p>
               <div className="mt-4 flex items-center gap-3">
                 <Button onClick={unlockPremium} className="h-11 flex-1 rounded-full">
@@ -159,8 +144,8 @@ function BellsPage() {
             </section>
           );
           })}
-        </div>
-      )}
+          </details>
+      </div>
     </main>
   );
 }
