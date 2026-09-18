@@ -73,9 +73,9 @@ function HomePage() {
             key={`bell-${bell.id}`}
             src={bell.image}
             alt=""
-            width={512}
-            height={512}
-            className="absolute inset-0 m-auto size-[94%] origin-[50%_10%] object-contain drop-shadow-[0_22px_18px_color-mix(in_oklab,var(--foreground)_20%,transparent)]"
+            width={2048}
+            height={2048}
+            className="absolute inset-0 m-auto size-[64%] origin-[50%_10%] object-contain drop-shadow-[0_18px_16px_color-mix(in_oklab,var(--foreground)_18%,transparent)]"
             style={{ rotate: smoothRotation }}
           />
         </div>

@@ -6,4 +6,4 @@
 - [x] Create 30 free and 40 premium AI bell assets in the approved 3D collector style; group premium by season and gate all 40 behind one 20 SEK native-store purchase.
 - [x] Polish transparent bell edges, enlarge the home bell, add the Halloween ghost, consolidate premium browsing, add 10 free and 30 deluxe backgrounds, and make shake motion continuous with one hand-bell sound.
 - [x] Restore the sharper original bell scale, remove the visible cutout fringe, curate the free and deluxe backgrounds, and slim the luxury navigation.
-- [ ] Match the newly approved home bell size exactly while keeping the rendered bell crisp and free of blur.
+- [x] Match the newly approved home bell size exactly while keeping the rendered bell crisp and free of blur.
