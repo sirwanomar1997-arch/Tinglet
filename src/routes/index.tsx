@@ -17,6 +17,8 @@ export const Route = createFileRoute("/")({
           "A premium hand bell for your phone. Shake naturally to play a soft, realistic hand-bell tone.",
       },
       { property: "og:title", content: "Elegant Hand Bell" },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
       {
         property: "og:description",
         content: "Shake naturally to ring a beautifully crafted hand bell.",
@@ -53,10 +55,10 @@ function HomePage() {
   }, [requestPermission]);
 
   return (
-    <main className="relative flex min-h-[calc(100svh-7.25rem)] flex-col overflow-hidden pb-3">
+    <main className="relative flex min-h-[calc(100svh-5.25rem)] flex-col overflow-hidden pb-2">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_50%_42%,color-mix(in_oklab,var(--stage-glow)_88%,transparent),transparent_54%)]" />
       <div className="relative flex flex-1 flex-col items-center justify-center">
-        <div className="relative h-[min(82svh,49rem)] w-full max-w-[38rem]" aria-hidden="true">
+        <div className="relative h-[min(78svh,46rem)] w-full max-w-[34rem]" aria-hidden="true">
           <motion.span
             key={`glow-${glow}`}
             className="absolute size-[72%] rounded-full blur-xl"
@@ -73,7 +75,7 @@ function HomePage() {
             alt=""
             width={512}
             height={512}
-            className="absolute inset-0 m-auto size-full origin-[50%_10%] object-contain drop-shadow-[0_28px_24px_color-mix(in_oklab,var(--foreground)_24%,transparent)]"
+            className="absolute inset-0 m-auto size-[94%] origin-[50%_10%] object-contain drop-shadow-[0_22px_18px_color-mix(in_oklab,var(--foreground)_20%,transparent)]"
             style={{ rotate: smoothRotation }}
           />
         </div>
