@@ -66,7 +66,7 @@ function HomePage() {
   }, [permission, requestPermission, shakeEnabled]);
 
   return (
-    <main className="relative flex min-h-[calc(100svh-5.25rem)] flex-col overflow-hidden pb-2">
+    <main className="relative flex min-h-[calc(100svh-4.75rem)] flex-col overflow-hidden pb-2">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_50%_42%,color-mix(in_oklab,var(--stage-glow)_88%,transparent),transparent_54%)]" />
       {shakeEnabled && (permission === "needs-permission" || permission === "denied") && (
         <Button

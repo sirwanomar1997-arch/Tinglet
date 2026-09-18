@@ -16,7 +16,7 @@ import {
   type PackId,
   type Bell,
 } from "./bells";
-import { DEFAULT_BACKGROUND_ID, getBackground, type Background } from "./backgrounds";
+import { DEFAULT_BACKGROUND_ID, getBackground, isPremiumBackground, type Background } from "./backgrounds";
 import { detectLang, t as translate, type Lang, type TKey } from "./i18n";
 
 type Persisted = {
@@ -115,7 +115,10 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
         if (isPremiumBell(id) && state.unlocked.length === 0) return;
         patch({ bellId: id });
       },
-      setBackground: (id) => patch({ backgroundId: id }),
+      setBackground: (id) => {
+        if (isPremiumBackground(id) && state.unlocked.length === 0) return;
+        patch({ backgroundId: id });
+      },
       unlockPack: () =>
         setState((prev) => ({
           ...prev,
