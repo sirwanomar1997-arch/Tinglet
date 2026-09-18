@@ -3,4 +3,9 @@
 - [ ] Normalize transparent canvas and scale to match free-01 without enlarging low-resolution pixels
 - [ ] Audit every bell for white/grey fringe, blur, missing details, and inconsistent scale
 - [ ] Verify representative bells on pale and dark app backgrounds at mobile size
+- [ ] Rename the app and all visible metadata to Tringlet
+- [ ] Keep exactly 5 free bells and 5 free backgrounds
+- [ ] Put every remaining bell and background in one 20 SEK premium unlock
+- [ ] Replace dominant backgrounds with calm, bell-friendly seasonal and luxury scenes inspired by the references
+- [ ] Prepare a new Tringlet Lovable web address when publishing
 - [ ] Publish only after the complete collection passes
