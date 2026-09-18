@@ -8,7 +8,13 @@ import {
   type ReactNode,
 } from "react";
 
-import { DEFAULT_BELL_ID, getBell, type PackId, type Bell } from "./bells";
+import {
+  DEFAULT_BELL_ID,
+  getBell,
+  PREMIUM_PACK_IDS,
+  type PackId,
+  type Bell,
+} from "./bells";
 import { DEFAULT_BACKGROUND_ID, getBackground, type Background } from "./backgrounds";
 import { detectLang, t as translate, type Lang, type TKey } from "./i18n";
 
@@ -105,12 +111,11 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       lang,
       setBell: (id) => patch({ bellId: id }),
       setBackground: (id) => patch({ backgroundId: id }),
-      unlockPack: (pack) =>
-        setState((prev) =>
-          prev.unlocked.includes(pack)
-            ? prev
-            : { ...prev, unlocked: [...prev.unlocked, pack] },
-        ),
+      unlockPack: () =>
+        setState((prev) => ({
+          ...prev,
+          unlocked: Array.from(new Set([...prev.unlocked, ...PREMIUM_PACK_IDS])),
+        })),
       isUnlocked: (pack) => pack === "classic" || state.unlocked.includes(pack),
       setVolume: (v) => patch({ volume: v }),
       setHaptics: (v) => patch({ haptics: v }),
