@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { motion, useMotionValue, useSpring } from "motion/react";
 import { useCallback, useEffect, useState } from "react";
 
+import { Button } from "@/components/ui/button";
 import { ringBell, unlockAudio, vibrate } from "@/lib/bell-audio";
 import { useAppState } from "@/lib/app-state";
 import { useShake } from "@/lib/use-shake";
@@ -67,17 +68,18 @@ function HomePage() {
   return (
     <main className="relative flex min-h-[calc(100svh-5.25rem)] flex-col overflow-hidden pb-2">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_50%_42%,color-mix(in_oklab,var(--stage-glow)_88%,transparent),transparent_54%)]" />
-      {shakeEnabled && permission === "needs-permission" && (
-        <button
+      {shakeEnabled && (permission === "needs-permission" || permission === "denied") && (
+        <Button
           type="button"
           onClick={() => {
             void unlockAudio();
             void requestPermission();
           }}
-          className="absolute inset-x-4 top-4 z-10 rounded-2xl border border-[color:var(--gilt)]/40 bg-background/70 px-4 py-3 text-center text-sm text-foreground/85 backdrop-blur-md"
+          variant="outline"
+          className="absolute inset-x-4 top-4 z-10 h-auto rounded-2xl border-primary/40 bg-background/70 px-4 py-3 text-center text-sm text-foreground/85 backdrop-blur-md"
         >
           {t("enableShake")}
-        </button>
+        </Button>
       )}
       <div className="relative flex flex-1 flex-col items-center justify-center">
         <div className="relative h-[min(78svh,46rem)] w-full max-w-[34rem]" aria-hidden="true">

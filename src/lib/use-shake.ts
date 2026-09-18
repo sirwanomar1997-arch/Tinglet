@@ -59,11 +59,16 @@ export function useShake(onShake: (impulse: ShakeImpulse) => void, enabled: bool
     if (!enabled || permission !== "granted") return;
 
     const onMotion = (event: DeviceMotionEvent) => {
-      const a = event.acceleration ?? event.accelerationIncludingGravity;
+      const linear = event.acceleration;
+      const gravity = event.accelerationIncludingGravity;
+      const hasLinearSample =
+        linear != null &&
+        [linear.x, linear.y, linear.z].some((value) => typeof value === "number");
+      const a = hasLinearSample ? linear : gravity;
       if (!a) return;
-      const x = a.x ?? 0;
-      const y = a.y ?? 0;
-      const z = a.z ?? 0;
+      const x = typeof a.x === "number" ? a.x : 0;
+      const y = typeof a.y === "number" ? a.y : 0;
+      const z = typeof a.z === "number" ? a.z : 0;
       const now = performance.now();
       const elapsedMs = Math.min(50, Math.max(5, now - (lastTime.current || now - 16.67)));
       const dt = elapsedMs / 1000;
@@ -83,7 +88,8 @@ export function useShake(onShake: (impulse: ShakeImpulse) => void, enabled: bool
       // damped pendulum, rather than replaying a canned animation.
       filtered.current.x += (x - filtered.current.x) * 0.34;
       filtered.current.y += (y - filtered.current.y) * 0.25;
-      const drive = Math.max(-18, Math.min(18, filtered.current.x));
+      const horizontalDrive = filtered.current.x + filtered.current.y * 0.32;
+      const drive = Math.max(-18, Math.min(18, horizontalDrive));
       velocity.current += drive * 2.15 * dt;
       velocity.current += -angle.current * 14 * dt;
       velocity.current *= Math.exp(-3.4 * dt);
