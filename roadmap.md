@@ -15,4 +15,4 @@
 - [ ] Google Play Console: skapa appen, ladda upp AAB, ikon, skärmbilder, produkt
 - [x] Steg-för-steg-guide för GitHub + Android + Play Console: /mnt/documents/tringlet-store/GITHUB-Android-Steg-for-steg.md
 
-- [ ] Uppdatera butikskatalogen till 12 klockor i ett 3 × 4-rutnät, inklusive Lönnkaskad.
+- [x] Uppdatera butikskatalogen till 12 klockor i ett 3 × 4-rutnät, inklusive Lönnkaskad.
