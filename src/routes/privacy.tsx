@@ -3,10 +3,10 @@ import { createFileRoute } from "@tanstack/react-router";
 export const Route = createFileRoute("/privacy")({
   head: () => ({
     meta: [
-      { title: "Integritetspolicy — Tringlet" },
-      { name: "description", content: "Privacy policy for Tringlet — we do not collect, store or share any personal data." },
-      { property: "og:title", content: "Integritetspolicy — Tringlet" },
-      { property: "og:description", content: "Tringlet does not collect, store or share any personal data." },
+      { title: "Integritetspolicy — Tinglet" },
+      { name: "description", content: "Privacy policy for Tinglet — we do not collect, store or share any personal data." },
+      { property: "og:title", content: "Integritetspolicy — Tinglet" },
+      { property: "og:description", content: "Tinglet does not collect, store or share any personal data." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
     ],
@@ -26,14 +26,14 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 function PrivacyPage() {
   return (
     <main className="mx-auto min-h-dvh w-full max-w-2xl px-6 py-14">
-      <p className="text-xs uppercase tracking-[0.25em] text-foreground/45">Tringlet</p>
+      <p className="text-xs uppercase tracking-[0.25em] text-foreground/45">Tinglet</p>
       <h1 className="mt-2 font-serif text-3xl text-foreground">Integritetspolicy</h1>
       <p className="mt-1 text-sm text-foreground/55">Privacy Policy · Senast uppdaterad: september 2026</p>
 
       <div className="mt-10 space-y-8">
         <Section title="Sammanfattning">
           <p>
-            Tringlet samlar inte in, lagrar eller delar några personuppgifter. Ingen information om dig lämnar
+            Tinglet samlar inte in, lagrar eller delar några personuppgifter. Ingen information om dig lämnar
             din telefon.
           </p>
         </Section>
@@ -53,7 +53,7 @@ function PrivacyPage() {
         <Section title="Köp">
           <p>
             Köp inuti appen hanteras säkert och fullständigt av App Store (Apple) respektive Google Play
-            (Google). Tringlet ser aldrig dina betalningsuppgifter.
+            (Google). Tinglet ser aldrig dina betalningsuppgifter.
           </p>
         </Section>
 
@@ -65,7 +65,7 @@ function PrivacyPage() {
         </Section>
 
         <Section title="Barn">
-          <p>Tringlet riktar sig inte till barn under 13 år och samlar inte in some form av data från någon.</p>
+          <p>Tinglet riktar sig inte till barn under 13 år och samlar inte in some form av data från någon.</p>
         </Section>
 
         <Section title="Kontakt">
@@ -78,7 +78,7 @@ function PrivacyPage() {
         <hr className="border-border" />
 
         <Section title="Privacy Policy (English)">
-          <p>Tringlet does not collect, store or share any personal data. The app works fully offline after purchase.</p>
+          <p>Tinglet does not collect, store or share any personal data. The app works fully offline after purchase.</p>
           <p>
             Motion sensors (accelerometer) are used only locally on your device to detect shaking and ring the
             bell — this data never leaves your phone. Your purchases are processed securely by the App Store /

@@ -84,12 +84,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         name: "viewport",
         content: "width=device-width, initial-scale=1, viewport-fit=cover",
       },
-      { title: "Tringlet" },
+      { title: "Tinglet" },
       {
         name: "description",
-        content: "Tringlet is a premium hand-bell collection. Shake naturally to ring.",
+        content: "Tinglet is a premium hand-bell collection. Shake naturally to ring.",
       },
-      { property: "og:title", content: "Tringlet" },
+      { property: "og:title", content: "Tinglet" },
       {
         property: "og:description",
         content: "A premium collection of beautiful hand bells. Shake naturally to ring.",

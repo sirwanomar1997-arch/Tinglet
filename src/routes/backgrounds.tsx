@@ -6,13 +6,13 @@ export const Route = createFileRoute("/backgrounds")({
   },
   head: () => ({
     meta: [
-      { title: "Backgrounds — Tringlet" },
+      { title: "Backgrounds — Tinglet" },
       {
         name: "description",
         content:
           "Pick a background for your bell: soft gradients, marble and stone, nature, minimal colours, festive scenes and dark moody tones.",
       },
-      { property: "og:title", content: "Backgrounds — Tringlet" },
+      { property: "og:title", content: "Backgrounds — Tinglet" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       {

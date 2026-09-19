@@ -11,13 +11,13 @@ export const Route = createFileRoute("/")({
   ssr: false,
   head: () => ({
     meta: [
-      { title: "Tringlet — Ring a beautiful hand bell" },
+      { title: "Tinglet — Ring a beautiful hand bell" },
       {
         name: "description",
         content:
           "A premium hand bell for your phone. Shake naturally to play a soft, realistic hand-bell tone.",
       },
-      { property: "og:title", content: "Tringlet" },
+      { property: "og:title", content: "Tinglet" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       {
