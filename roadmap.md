@@ -17,4 +17,4 @@
 
 - [x] Uppdatera butikskatalogen till 12 klockor i ett 3 × 4-rutnät, inklusive Lönnkaskad.
 
-- [ ] Förbättra butikskatalogens kommersiella text och synlighet.
+- [x] Förbättra butikskatalogens kommersiella text och synlighet.
