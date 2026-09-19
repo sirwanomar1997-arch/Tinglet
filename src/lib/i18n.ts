@@ -1,7 +1,7 @@
 export type Lang = "en" | "sv";
 
 const dict = {
-  appName: { en: "Tringlet", sv: "Tringlet" },
+  appName: { en: "Tinglet", sv: "Tinglet" },
   home: { en: "Home", sv: "Hem" },
   bells: { en: "Bells", sv: "Klockor" },
   backgrounds: { en: "Backgrounds", sv: "Bakgrunder" },
@@ -68,14 +68,14 @@ const dict = {
   freeCollection: { en: "Free bell", sv: "Gratis klocka" },
   premiumCollection: { en: "Premium bells", sv: "Premiumklockor" },
   premiumCollectionSub: { en: "All premium designs · SEK 39", sv: "Alla premiumdesigner · 39 kr" },
-  premiumEverything: { en: "The complete Tringlet collection", sv: "Hela Tringlet-kollektionen" },
+  premiumEverything: { en: "The complete Tinglet collection", sv: "Hela Tinglet-kollektionen" },
   premiumEverythingSub: {
     en: "Unlock every premium hand bell and background. Available to choose immediately.",
     sv: "Lås upp alla premiumklockor och bakgrunder. Kan väljas direkt efter köpet.",
   },
   handBells: { en: "Hand bells", sv: "Handklockor" },
   premiumCatalog: { en: "Premium Catalog", sv: "Premiumkatalog" },
-  premiumCatalogTag: { en: "Tringlet exclusive", sv: "Exklusivt från Tringlet" },
+  premiumCatalogTag: { en: "Tinglet exclusive", sv: "Exklusivt från Tinglet" },
   premiumCatalogPitch: {
     en: "A world of collectible hand bells and artful backgrounds.",
     sv: "En värld av samlarhandklockor och konstfulla bakgrunder.",

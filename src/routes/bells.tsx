@@ -15,10 +15,10 @@ import { toast } from "sonner";
 export const Route = createFileRoute("/bells")({
   head: () => ({
     meta: [
-      { title: "Hand Bells & Backgrounds — Tringlet" },
-      { name: "description", content: "Choose your Tringlet hand bell and background, or unlock the complete premium collection." },
-      { property: "og:title", content: "Hand Bells & Backgrounds — Tringlet" },
-      { property: "og:description", content: "Create your own Tringlet combination from beautiful hand bells and backgrounds." },
+      { title: "Hand Bells & Backgrounds — Tinglet" },
+      { name: "description", content: "Choose your Tinglet hand bell and background, or unlock the complete premium collection." },
+      { property: "og:title", content: "Hand Bells & Backgrounds — Tinglet" },
+      { property: "og:description", content: "Create your own Tinglet combination from beautiful hand bells and backgrounds." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
