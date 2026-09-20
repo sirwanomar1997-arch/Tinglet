@@ -1,8 +1,8 @@
 # Tinglet
 
-App Name: Elegant Hand Bell
+App Name: Tinglet
 
-Base Price: One-time purchase 20 SEK / $2 to install the app.
+Base Price: Free to download. Purchase inside app- premium catalog.
 
 Concept
 
