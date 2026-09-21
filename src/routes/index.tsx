@@ -47,9 +47,31 @@ function HomePage() {
 
   useShake(ring, shakeEnabled);
 
+  const tapRing = useCallback(() => {
+    void unlockAudio();
+    rotation.set(11);
+    window.setTimeout(() => rotation.set(0), 220);
+    ringBell(bell.tone, volume, 0.72);
+    if (haptics) vibrate(8);
+    setGlow((g) => g + 1);
+  }, [bell.tone, haptics, rotation, volume]);
+
   useEffect(() => {
     const timeout = window.setTimeout(() => setShowShakeHint(false), 3600);
     return () => window.clearTimeout(timeout);
+  }, []);
+
+  // Mobile browsers and WebViews keep audio muted until the first touch.
+  useEffect(() => {
+    const prime = () => {
+      void unlockAudio();
+    };
+    window.addEventListener("pointerdown", prime, { capture: true, once: true });
+    window.addEventListener("touchstart", prime, { capture: true, once: true });
+    return () => {
+      window.removeEventListener("pointerdown", prime, { capture: true });
+      window.removeEventListener("touchstart", prime, { capture: true });
+    };
   }, []);
 
   return (
@@ -85,7 +107,13 @@ function HomePage() {
         </motion.div>
       )}
       <div className="relative flex flex-1 flex-col items-center justify-center">
-        <div className="relative h-[min(78svh,46rem)] w-full max-w-[34rem]" aria-hidden="true">
+        <div
+          className="relative h-[min(78svh,46rem)] w-full max-w-[34rem] cursor-pointer select-none"
+          onPointerDown={tapRing}
+          role="button"
+          tabIndex={-1}
+          aria-label={t("shakeYourPhone")}
+        >
           <motion.span
             key={`glow-${glow}`}
             className="absolute size-[72%] rounded-full blur-xl"

@@ -117,28 +117,42 @@ export function useShake(onShake: (impulse: ShakeImpulse) => void, enabled: bool
     let cancelled = false;
     let webListening = false;
     let removeNative: (() => void) | null = null;
+    // Both sources can be available at once (native plugin + WebView sensor).
+    // The first one that actually delivers samples wins, so a ring never fires twice.
+    let activeSource: "native" | "web" | null = null;
+
+    const feed = (
+      source: "native" | "web",
+      acceleration: AccelerationSample | null | undefined,
+      withGravity: AccelerationSample | null | undefined,
+      interval?: number,
+    ) => {
+      if (activeSource == null) activeSource = source;
+      if (activeSource !== source) return;
+      handleAcceleration(acceleration, withGravity, interval);
+    };
 
     const onMotion = (event: DeviceMotionEvent) => {
-      handleAcceleration(event.acceleration, event.accelerationIncludingGravity);
+      feed("web", event.acceleration, event.accelerationIncludingGravity);
     };
 
     const startWebMotion = async (mode: MotionPermissionMode) => {
-      if (!("DeviceMotionEvent" in window)) {
-        setPermission("unsupported");
-        return;
-      }
+      if (webListening || !("DeviceMotionEvent" in window)) return;
       const result = await requestBrowserPermission(mode);
       if (cancelled) return;
-      setPermission(result ?? "unsupported");
-      if (result !== "granted" || webListening) return;
-      webListening = true;
-      window.addEventListener("devicemotion", onMotion);
+      if (result === "granted") {
+        webListening = true;
+        window.addEventListener("devicemotion", onMotion);
+        setPermission("granted");
+      } else if (!Capacitor.isNativePlatform()) {
+        setPermission(result ?? "unsupported");
+      }
     };
 
     const startNativeMotion = async () => {
       try {
         const handle = await Motion.addListener("accel", (event: AccelListenerEvent) => {
-          handleAcceleration(event.acceleration, event.accelerationIncludingGravity, event.interval);
+          feed("native", event.acceleration, event.accelerationIncludingGravity, event.interval);
         });
         if (cancelled) {
           void handle.remove();
@@ -149,18 +163,17 @@ export function useShake(onShake: (impulse: ShakeImpulse) => void, enabled: bool
         };
         setPermission("granted");
       } catch {
-        void startWebMotion("quiet");
+        /* plugin unavailable in this build — the WebView sensor keeps working */
       }
     };
 
     if (Capacitor.isNativePlatform()) {
+      setPermission("granted");
       void startNativeMotion();
-    } else {
-      void startWebMotion("quiet");
     }
+    void startWebMotion("quiet");
 
     const retryFromAnyTouch = () => {
-      if (Capacitor.isNativePlatform()) return;
       void startWebMotion("gesture");
     };
     window.addEventListener("pointerdown", retryFromAnyTouch, { capture: true });
