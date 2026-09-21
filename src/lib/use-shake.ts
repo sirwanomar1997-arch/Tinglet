@@ -1,9 +1,20 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+
+import { Capacitor } from "@capacitor/core";
+import { Motion, type AccelListenerEvent } from "@capacitor/motion";
 
 type PermissionState = "unsupported" | "needs-permission" | "granted" | "denied";
 
 type MotionEventCtor = {
   requestPermission?: () => Promise<"granted" | "denied">;
+};
+
+type MotionPermissionMode = "quiet" | "gesture";
+
+type AccelerationSample = {
+  x?: number | null;
+  y?: number | null;
+  z?: number | null;
 };
 
 export type ShakeImpulse = {
@@ -30,95 +41,139 @@ export function useShake(onShake: (impulse: ShakeImpulse) => void, enabled: bool
   const handler = useRef(onShake);
   handler.current = onShake;
 
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    if (!("DeviceMotionEvent" in window)) {
-      setPermission("unsupported");
-      return;
-    }
-    const ctor = window.DeviceMotionEvent as unknown as MotionEventCtor;
-    setPermission(typeof ctor.requestPermission === "function" ? "needs-permission" : "granted");
-  }, []);
-
-  const requestPermission = useCallback(async () => {
-    if (typeof window === "undefined" || !("DeviceMotionEvent" in window)) return;
+  async function requestBrowserPermission(mode: MotionPermissionMode): Promise<PermissionState> {
+    if (typeof window === "undefined" || !("DeviceMotionEvent" in window)) return "unsupported";
     const ctor = window.DeviceMotionEvent as unknown as MotionEventCtor;
     if (typeof ctor.requestPermission !== "function") {
-      setPermission("granted");
-      return;
+      return "granted";
     }
     try {
       const result = await ctor.requestPermission();
-      setPermission(result === "granted" ? "granted" : "denied");
+      return result === "granted" ? "granted" : "denied";
     } catch {
-      setPermission("denied");
+      return mode === "quiet" ? "needs-permission" : "denied";
     }
-  }, []);
+  }
 
-  useEffect(() => {
-    if (!enabled || permission !== "granted") return;
+  function handleAcceleration(
+    acceleration: AccelerationSample | null | undefined,
+    accelerationIncludingGravity: AccelerationSample | null | undefined,
+    interval?: number,
+  ) {
+    const hasLinearSample =
+      acceleration != null &&
+      [acceleration.x, acceleration.y, acceleration.z].some((value) => typeof value === "number");
+    const a = hasLinearSample ? acceleration : accelerationIncludingGravity;
+    if (!a) return;
+    const x = typeof a.x === "number" ? a.x : 0;
+    const y = typeof a.y === "number" ? a.y : 0;
+    const z = typeof a.z === "number" ? a.z : 0;
+    const now = performance.now();
+    const measured = typeof interval === "number" && interval > 0 ? interval : now - (lastTime.current || now - 16.67);
+    const elapsedMs = Math.min(50, Math.max(5, measured));
+    const dt = elapsedMs / 1000;
+    lastTime.current = now;
 
-    const onMotion = (event: DeviceMotionEvent) => {
-      const linear = event.acceleration;
-      const gravity = event.accelerationIncludingGravity;
-      const hasLinearSample =
-        linear != null &&
-        [linear.x, linear.y, linear.z].some((value) => typeof value === "number");
-      const a = hasLinearSample ? linear : gravity;
-      if (!a) return;
-      const x = typeof a.x === "number" ? a.x : 0;
-      const y = typeof a.y === "number" ? a.y : 0;
-      const z = typeof a.z === "number" ? a.z : 0;
-      const now = performance.now();
-      const elapsedMs = Math.min(50, Math.max(5, now - (lastTime.current || now - 16.67)));
-      const dt = elapsedMs / 1000;
-      lastTime.current = now;
+    // Normalize sensor change to a 60 Hz baseline. Newer phones often emit
+    // many small samples, while older phones emit fewer, larger samples.
+    const rawChange = Math.hypot(x - previous.current.x, y - previous.current.y, z - previous.current.z);
+    const change = rawChange * Math.min(2.6, Math.max(0.55, 16.67 / elapsedMs));
+    previous.current = { x, y, z };
 
-      // Normalize sensor change to a 60 Hz baseline. Newer phones often emit
-      // many small samples, while older phones emit fewer, larger samples.
-      const rawChange = Math.hypot(
-        x - previous.current.x,
-        y - previous.current.y,
-        z - previous.current.z,
-      );
-      const change = rawChange * Math.min(2.6, Math.max(0.55, 16.67 / elapsedMs));
-      previous.current = { x, y, z };
+    // Follow the hand continuously: filtered lateral acceleration drives a
+    // damped pendulum, rather than replaying a canned animation.
+    filtered.current.x += (x - filtered.current.x) * 0.34;
+    filtered.current.y += (y - filtered.current.y) * 0.25;
+    const horizontalDrive = filtered.current.x + filtered.current.y * 0.32;
+    const drive = Math.max(-18, Math.min(18, horizontalDrive));
+    velocity.current += drive * 2.15 * dt;
+    velocity.current += -angle.current * 14 * dt;
+    velocity.current *= Math.exp(-3.4 * dt);
+    angle.current = Math.max(-17, Math.min(17, angle.current + velocity.current * 58 * dt));
 
-      // Follow the hand continuously: filtered lateral acceleration drives a
-      // damped pendulum, rather than replaying a canned animation.
-      filtered.current.x += (x - filtered.current.x) * 0.34;
-      filtered.current.y += (y - filtered.current.y) * 0.25;
-      const horizontalDrive = filtered.current.x + filtered.current.y * 0.32;
-      const drive = Math.max(-18, Math.min(18, horizontalDrive));
-      velocity.current += drive * 2.15 * dt;
-      velocity.current += -angle.current * 14 * dt;
-      velocity.current *= Math.exp(-3.4 * dt);
-      angle.current = Math.max(-17, Math.min(17, angle.current + velocity.current * 58 * dt));
-
-      const dominant = Math.abs(x) >= Math.abs(y) && Math.abs(x) >= Math.abs(z)
+    const dominant =
+      Math.abs(x) >= Math.abs(y) && Math.abs(x) >= Math.abs(z)
         ? x
         : Math.abs(y) >= Math.abs(z)
           ? y
           : z;
-      const direction = Math.sign(dominant);
-      const reversed = direction !== 0 && direction !== lastDirection.current;
-      const impact =
-        change > (reversed ? 1.35 : 3.4) &&
-        now - lastRing.current > 92;
-      if (impact) lastRing.current = now;
-      if (direction !== 0 && Math.abs(dominant) > 0.75) lastDirection.current = direction;
-      handler.current({
-        intensity: Math.min(1, Math.max(0.12, change / 11)),
-        x: Math.max(-1, Math.min(1, x / 16)),
-        y: Math.max(-1, Math.min(1, y / 16)),
-        angle: angle.current,
-        impact,
-      });
+    const direction = Math.sign(dominant);
+    const reversed = direction !== 0 && direction !== lastDirection.current;
+    const impact = change > (reversed ? 1.35 : 3.4) && now - lastRing.current > 92;
+    if (impact) lastRing.current = now;
+    if (direction !== 0 && Math.abs(dominant) > 0.75) lastDirection.current = direction;
+    handler.current({
+      intensity: Math.min(1, Math.max(0.12, change / 11)),
+      x: Math.max(-1, Math.min(1, x / 16)),
+      y: Math.max(-1, Math.min(1, y / 16)),
+      angle: angle.current,
+      impact,
+    });
+  }
+
+  useEffect(() => {
+    if (!enabled || typeof window === "undefined") return;
+
+    let cancelled = false;
+    let webListening = false;
+    let removeNative: (() => void) | null = null;
+
+    const onMotion = (event: DeviceMotionEvent) => {
+      handleAcceleration(event.acceleration, event.accelerationIncludingGravity);
     };
 
-    window.addEventListener("devicemotion", onMotion);
-    return () => window.removeEventListener("devicemotion", onMotion);
-  }, [enabled, permission]);
+    const startWebMotion = async (mode: MotionPermissionMode) => {
+      if (!("DeviceMotionEvent" in window)) {
+        setPermission("unsupported");
+        return;
+      }
+      const result = await requestBrowserPermission(mode);
+      if (cancelled) return;
+      setPermission(result ?? "unsupported");
+      if (result !== "granted" || webListening) return;
+      webListening = true;
+      window.addEventListener("devicemotion", onMotion);
+    };
 
-  return { permission, requestPermission };
+    const startNativeMotion = async () => {
+      try {
+        const handle = await Motion.addListener("accel", (event: AccelListenerEvent) => {
+          handleAcceleration(event.acceleration, event.accelerationIncludingGravity, event.interval);
+        });
+        if (cancelled) {
+          void handle.remove();
+          return;
+        }
+        removeNative = () => {
+          void handle.remove();
+        };
+        setPermission("granted");
+      } catch {
+        void startWebMotion("quiet");
+      }
+    };
+
+    if (Capacitor.isNativePlatform()) {
+      void startNativeMotion();
+    } else {
+      void startWebMotion("quiet");
+    }
+
+    const retryFromAnyTouch = () => {
+      if (Capacitor.isNativePlatform()) return;
+      void startWebMotion("gesture");
+    };
+    window.addEventListener("pointerdown", retryFromAnyTouch, { capture: true });
+    window.addEventListener("touchend", retryFromAnyTouch, { capture: true });
+
+    return () => {
+      cancelled = true;
+      window.removeEventListener("devicemotion", onMotion);
+      window.removeEventListener("pointerdown", retryFromAnyTouch, { capture: true });
+      window.removeEventListener("touchend", retryFromAnyTouch, { capture: true });
+      removeNative?.();
+    };
+  }, [enabled]);
+
+  return { permission };
 }

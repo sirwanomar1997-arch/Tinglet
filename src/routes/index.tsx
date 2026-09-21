@@ -1,8 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { MoveHorizontal, Smartphone } from "lucide-react";
 import { motion, useMotionValue, useSpring } from "motion/react";
 import { useCallback, useEffect, useState } from "react";
 
-import { Button } from "@/components/ui/button";
 import { ringBell, unlockAudio, vibrate } from "@/lib/bell-audio";
 import { useAppState } from "@/lib/app-state";
 import { useShake } from "@/lib/use-shake";
@@ -32,6 +32,7 @@ export const Route = createFileRoute("/")({
 function HomePage() {
   const { t, bell, volume, haptics, shakeEnabled } = useAppState();
   const [glow, setGlow] = useState(0);
+  const [showShakeHint, setShowShakeHint] = useState(true);
   const rotation = useMotionValue(0);
   const smoothRotation = useSpring(rotation, { stiffness: 320, damping: 24, mass: 0.55 });
 
@@ -44,42 +45,44 @@ function HomePage() {
     setGlow((g) => g + 1);
   }, [bell.tone, haptics, rotation, volume]);
 
-  const { permission, requestPermission } = useShake(ring, shakeEnabled);
+  useShake(ring, shakeEnabled);
 
   useEffect(() => {
-    // iOS only grants motion access from a direct, synchronous user gesture,
-    // and it must run on the top-level document (not inside a preview
-    // iframe). Keep listening — rather than a one-shot listener — so a tap
-    // that lands on a non-propagating control still gets a retry, and so we
-    // keep asking until permission is actually granted.
-    if (!shakeEnabled || permission === "granted" || permission === "unsupported") return;
-    const prepare = () => {
-      void unlockAudio();
-      void requestPermission();
-    };
-    window.addEventListener("pointerdown", prepare, { capture: true });
-    window.addEventListener("touchend", prepare, { capture: true });
-    return () => {
-      window.removeEventListener("pointerdown", prepare, { capture: true });
-      window.removeEventListener("touchend", prepare, { capture: true });
-    };
-  }, [permission, requestPermission, shakeEnabled]);
+    const timeout = window.setTimeout(() => setShowShakeHint(false), 3600);
+    return () => window.clearTimeout(timeout);
+  }, []);
 
   return (
     <main className="relative flex min-h-[calc(100svh-4.75rem)] flex-col overflow-hidden pb-2">
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_50%_42%,color-mix(in_oklab,var(--stage-glow)_88%,transparent),transparent_54%)]" />
-      {shakeEnabled && (permission === "needs-permission" || permission === "denied") && (
-        <Button
-          type="button"
-          onClick={() => {
-            void unlockAudio();
-            void requestPermission();
-          }}
-          variant="outline"
-          className="absolute inset-x-4 top-4 z-10 h-auto rounded-2xl border-primary/40 bg-background/70 px-4 py-3 text-center text-sm text-foreground/85 backdrop-blur-md"
+      {shakeEnabled && showShakeHint && (
+        <motion.div
+          className="pointer-events-none absolute inset-x-0 top-[max(1rem,env(safe-area-inset-top))] z-10 flex justify-center px-4"
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+          transition={{ duration: 0.45, ease: "easeOut" }}
+          aria-hidden="true"
         >
-          {t("enableShake")}
-        </Button>
+          <div className="flex items-center gap-3 rounded-full border border-primary/25 bg-background/55 px-4 py-2.5 text-sm font-medium text-foreground/80 shadow-[0_14px_34px_color-mix(in_oklab,var(--foreground)_10%,transparent)] backdrop-blur-md">
+            <span className="relative flex size-8 items-center justify-center text-primary">
+              <motion.span
+                className="absolute inset-0 rounded-full border border-primary/25"
+                animate={{ scale: [0.9, 1.14, 0.9], opacity: [0.45, 0.16, 0.45] }}
+                transition={{ duration: 1.2, repeat: Infinity, ease: "easeInOut" }}
+              />
+              <motion.span
+                className="relative"
+                animate={{ rotate: [-8, 8, -7, 7, 0], x: [-1, 1, -1, 1, 0] }}
+                transition={{ duration: 0.9, repeat: Infinity, repeatDelay: 0.24, ease: "easeInOut" }}
+              >
+                <Smartphone size={22} strokeWidth={1.8} />
+              </motion.span>
+            </span>
+            <span>{t("shakeYourPhone")}</span>
+            <MoveHorizontal className="text-primary/70" size={18} strokeWidth={1.8} />
+          </div>
+        </motion.div>
       )}
       <div className="relative flex flex-1 flex-col items-center justify-center">
         <div className="relative h-[min(78svh,46rem)] w-full max-w-[34rem]" aria-hidden="true">

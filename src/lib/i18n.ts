@@ -8,7 +8,7 @@ const dict = {
   bellAndBackground: { en: "Bell & background", sv: "Klocka & bakgrund" },
   tapOrShake: { en: "Shake or tap to ring", sv: "Skaka eller tryck för att ringa" },
   tapToRing: { en: "Tap the bell to ring", sv: "Tryck på klockan för att ringa" },
-  enableShake: { en: "Enable shake to ring", sv: "Aktivera skaka för att ringa" },
+  shakeYourPhone: { en: "Shake your phone", sv: "Skaka telefonen" },
   shakeReady: { en: "Shake ready", sv: "Skakning aktiv" },
   settings: { en: "Settings", sv: "Inställningar" },
   volume: { en: "Volume", sv: "Volym" },
