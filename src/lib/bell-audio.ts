@@ -63,6 +63,11 @@ export async function unlockAudio(): Promise<void> {
   await loadHandBell(context);
 }
 
+/** True when the audio context is actually running (sound will play). */
+export function isAudioUnlocked(): boolean {
+  return ctx != null && ctx.state === "running";
+}
+
 function strikeNoise(context: AudioContext, target: AudioNode, when: number, gain: number) {
   const length = Math.floor(context.sampleRate * 0.045);
   const buffer = context.createBuffer(1, length, context.sampleRate);

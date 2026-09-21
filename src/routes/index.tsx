@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { MoveHorizontal, Smartphone } from "lucide-react";
 import { motion, useMotionValue, useSpring } from "motion/react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
-import { ringBell, unlockAudio, vibrate } from "@/lib/bell-audio";
+import { isAudioUnlocked, ringBell, unlockAudio, vibrate } from "@/lib/bell-audio";
 import { useAppState } from "@/lib/app-state";
 import { useShake } from "@/lib/use-shake";
 
@@ -35,11 +35,18 @@ function HomePage() {
   const [showShakeHint, setShowShakeHint] = useState(true);
   const rotation = useMotionValue(0);
   const smoothRotation = useSpring(rotation, { stiffness: 320, damping: 24, mass: 0.55 });
+  // If the phone is shaken before the WebView has allowed sound, remember it
+  // and ring as soon as audio unlocks — the user never has to tap the bell.
+  const pendingRing = useRef(0);
 
   const ring = useCallback(({ intensity, angle, impact }: { intensity: number; angle: number; impact: boolean }) => {
     rotation.set(angle);
     if (!impact) return;
     void unlockAudio();
+    if (!isAudioUnlocked()) {
+      pendingRing.current = Math.max(pendingRing.current, intensity);
+      return;
+    }
     ringBell(bell.tone, volume, intensity);
     if (haptics) vibrate(Math.round(4 + intensity * 7));
     setGlow((g) => g + 1);
@@ -62,17 +69,26 @@ function HomePage() {
   }, []);
 
   // Mobile browsers and WebViews keep audio muted until the first touch.
+  // Any touch anywhere unlocks it — and if the bell was already shaken, it
+  // rings immediately, so shaking always answers with sound.
   useEffect(() => {
     const prime = () => {
-      void unlockAudio();
+      void unlockAudio().then(() => {
+        const intensity = pendingRing.current;
+        if (intensity <= 0 || !isAudioUnlocked()) return;
+        pendingRing.current = 0;
+        ringBell(bell.tone, volume, intensity);
+        if (haptics) vibrate(Math.round(4 + intensity * 7));
+        setGlow((g) => g + 1);
+      });
     };
-    window.addEventListener("pointerdown", prime, { capture: true, once: true });
-    window.addEventListener("touchstart", prime, { capture: true, once: true });
+    window.addEventListener("pointerdown", prime, { capture: true });
+    window.addEventListener("touchstart", prime, { capture: true });
     return () => {
       window.removeEventListener("pointerdown", prime, { capture: true });
       window.removeEventListener("touchstart", prime, { capture: true });
     };
-  }, []);
+  }, [bell.tone, haptics, volume]);
 
   return (
     <main className="relative flex min-h-[calc(100svh-4.75rem)] flex-col overflow-hidden pb-2">
