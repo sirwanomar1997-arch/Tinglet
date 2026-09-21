@@ -35,11 +35,18 @@ function HomePage() {
   const [showShakeHint, setShowShakeHint] = useState(true);
   const rotation = useMotionValue(0);
   const smoothRotation = useSpring(rotation, { stiffness: 320, damping: 24, mass: 0.55 });
+  // If the phone is shaken before the WebView has allowed sound, remember it
+  // and ring as soon as audio unlocks — the user never has to tap the bell.
+  const pendingRing = useRef(0);
 
   const ring = useCallback(({ intensity, angle, impact }: { intensity: number; angle: number; impact: boolean }) => {
     rotation.set(angle);
     if (!impact) return;
     void unlockAudio();
+    if (!isAudioUnlocked()) {
+      pendingRing.current = Math.max(pendingRing.current, intensity);
+      return;
+    }
     ringBell(bell.tone, volume, intensity);
     if (haptics) vibrate(Math.round(4 + intensity * 7));
     setGlow((g) => g + 1);
