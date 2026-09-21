@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 
 import { Capacitor } from "@capacitor/core";
-import { Motion, type Acceleration, type AccelListenerEvent } from "@capacitor/motion";
+import { Motion, type AccelListenerEvent } from "@capacitor/motion";
 
 type PermissionState = "unsupported" | "needs-permission" | "granted" | "denied";
 
@@ -10,6 +10,12 @@ type MotionEventCtor = {
 };
 
 type MotionPermissionMode = "quiet" | "gesture";
+
+type AccelerationSample = {
+  x?: number | null;
+  y?: number | null;
+  z?: number | null;
+};
 
 export type ShakeImpulse = {
   intensity: number;
@@ -36,7 +42,7 @@ export function useShake(onShake: (impulse: ShakeImpulse) => void, enabled: bool
   handler.current = onShake;
 
   async function requestBrowserPermission(mode: MotionPermissionMode): Promise<PermissionState> {
-    if (typeof window === "undefined" || !("DeviceMotionEvent" in window)) return;
+    if (typeof window === "undefined" || !("DeviceMotionEvent" in window)) return "unsupported";
     const ctor = window.DeviceMotionEvent as unknown as MotionEventCtor;
     if (typeof ctor.requestPermission !== "function") {
       return "granted";
@@ -50,8 +56,8 @@ export function useShake(onShake: (impulse: ShakeImpulse) => void, enabled: bool
   }
 
   function handleAcceleration(
-    acceleration: Acceleration | null | undefined,
-    accelerationIncludingGravity: Acceleration | null | undefined,
+    acceleration: AccelerationSample | null | undefined,
+    accelerationIncludingGravity: AccelerationSample | null | undefined,
     interval?: number,
   ) {
     const hasLinearSample =
@@ -109,6 +115,7 @@ export function useShake(onShake: (impulse: ShakeImpulse) => void, enabled: bool
     if (!enabled || typeof window === "undefined") return;
 
     let cancelled = false;
+    let webListening = false;
     let removeNative: (() => void) | null = null;
 
     const onMotion = (event: DeviceMotionEvent) => {
@@ -123,7 +130,8 @@ export function useShake(onShake: (impulse: ShakeImpulse) => void, enabled: bool
       const result = await requestBrowserPermission(mode);
       if (cancelled) return;
       setPermission(result ?? "unsupported");
-      if (result !== "granted") return;
+      if (result !== "granted" || webListening) return;
+      webListening = true;
       window.addEventListener("devicemotion", onMotion);
     };
 
@@ -152,6 +160,7 @@ export function useShake(onShake: (impulse: ShakeImpulse) => void, enabled: bool
     }
 
     const retryFromAnyTouch = () => {
+      if (Capacitor.isNativePlatform()) return;
       void startWebMotion("gesture");
     };
     window.addEventListener("pointerdown", retryFromAnyTouch, { capture: true });
