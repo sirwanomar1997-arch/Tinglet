@@ -69,17 +69,26 @@ function HomePage() {
   }, []);
 
   // Mobile browsers and WebViews keep audio muted until the first touch.
+  // Any touch anywhere unlocks it — and if the bell was already shaken, it
+  // rings immediately, so shaking always answers with sound.
   useEffect(() => {
     const prime = () => {
-      void unlockAudio();
+      void unlockAudio().then(() => {
+        const intensity = pendingRing.current;
+        if (intensity <= 0 || !isAudioUnlocked()) return;
+        pendingRing.current = 0;
+        ringBell(bell.tone, volume, intensity);
+        if (haptics) vibrate(Math.round(4 + intensity * 7));
+        setGlow((g) => g + 1);
+      });
     };
-    window.addEventListener("pointerdown", prime, { capture: true, once: true });
-    window.addEventListener("touchstart", prime, { capture: true, once: true });
+    window.addEventListener("pointerdown", prime, { capture: true });
+    window.addEventListener("touchstart", prime, { capture: true });
     return () => {
       window.removeEventListener("pointerdown", prime, { capture: true });
       window.removeEventListener("touchstart", prime, { capture: true });
     };
-  }, []);
+  }, [bell.tone, haptics, volume]);
 
   return (
     <main className="relative flex min-h-[calc(100svh-4.75rem)] flex-col overflow-hidden pb-2">
