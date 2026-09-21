@@ -107,7 +107,13 @@ function HomePage() {
         </motion.div>
       )}
       <div className="relative flex flex-1 flex-col items-center justify-center">
-        <div className="relative h-[min(78svh,46rem)] w-full max-w-[34rem]" aria-hidden="true">
+        <div
+          className="relative h-[min(78svh,46rem)] w-full max-w-[34rem] cursor-pointer select-none"
+          onPointerDown={tapRing}
+          role="button"
+          tabIndex={-1}
+          aria-label={t("shakeYourPhone")}
+        >
           <motion.span
             key={`glow-${glow}`}
             className="absolute size-[72%] rounded-full blur-xl"
