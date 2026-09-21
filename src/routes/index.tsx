@@ -1,9 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { MoveHorizontal, Smartphone } from "lucide-react";
 import { motion, useMotionValue, useSpring } from "motion/react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
-import { ringBell, unlockAudio, vibrate } from "@/lib/bell-audio";
+import { isAudioUnlocked, ringBell, unlockAudio, vibrate } from "@/lib/bell-audio";
 import { useAppState } from "@/lib/app-state";
 import { useShake } from "@/lib/use-shake";
 
