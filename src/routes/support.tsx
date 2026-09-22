@@ -1,89 +1,85 @@
-import { createFileRoute } from '@tanstack/react-router'
-import { useId } from 'react'
-import { Helmet } from 'react-helmet-async'
+import { createFileRoute } from "@tanstack/react-router";
 
-export const Route = createFileRoute('/support')({
+export const Route = createFileRoute("/support")({
+  head: () => ({
+    meta: [
+      { title: "Support — Tinglet" },
+      { name: "description", content: "Support for Tinglet — shake your phone and ring the bell. How it works, sound help and contact." },
+      { property: "og:title", content: "Support — Tinglet" },
+      { property: "og:description", content: "Need help with Tinglet? Shake your phone and ring the bell." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
+    ],
+  }),
   component: SupportPage,
-})
+});
 
-const CONTENT = {
-  en: {
-    title: 'Tinglet Support',
-    intro: 'Need help with Tinglet? We are here for you.',
-    howTitle: 'How the app works',
-    how: [
-      'Open Tinglet — a beautiful hand bell appears.',
-      'Shake your phone and the bell swings and rings.',
-      'You can also tap the bell to ring it.',
-    ],
-    audioTitle: 'No sound?',
-    audio: 'On iPhone, the first tap on the screen turns the sound on. Touch the screen once, then shake — the bell will ring.',
-    premiumTitle: 'Premium unlock',
-    premium: 'Tinglet Premium unlocks all 70 bells and every background with a single one-time purchase. If you bought it on a new phone, tap "Restore purchase" in the app.',
-    contactTitle: 'Contact us',
-    contactText: 'Email us and we will answer within a couple of days:',
-    email: 'sirwanomar@hotmail.com',
-    back: '← Back to Tinglet',
-  },
-  sv: {
-    title: 'Tinglet Support',
-    intro: 'Behöver du hjälp med Tinglet? Vi finns här för dig.',
-    howTitle: 'Så fungerar appen',
-    how: [
-      'Öppna Tinglet — en vacker handklocka visas.',
-      'Skaka telefonen så svingar klockan och plinga.',
-      'Du kan också trycka på klockan för att plinga.',
-    ],
-    audioTitle: 'Inget ljud?',
-    audio: 'På iPhone slås ljudet på första gången du rör skärmen. Rör skärmen en gång, skaka sedan — klockan ringer.',
-    premiumTitle: 'Premium-upplåsning',
-    premium: 'Tinglet Premium låser upp alla 70 klockor och alla bakgrunder med ett engångsköp. Köpte du på en ny telefon — tryck "Återställ köp" i appen.',
-    contactTitle: 'Kontakta oss',
-    contactText: 'Mejla oss så svarar vi inom ett par dagar:',
-    email: 'sirwanomar@hotmail.com',
-    back: '← Tillbaka till Tinglet',
-  },
-} as const
+function Section({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <section className="space-y-2">
+      <h2 className="font-serif text-lg text-foreground">{title}</h2>
+      <div className="space-y-2 text-sm leading-relaxed text-foreground/75">{children}</div>
+    </section>
+  );
+}
 
 function SupportPage() {
-  const id = useId()
-  const t = CONTENT.en
   return (
-    <div className="min-h-screen bg-[#faf6ef] text-[#2b2118]">
-      <Helmet>
-        <title>Tinglet Support</title>
-        <meta name="description" content="Support for Tinglet — shake your phone and ring the bell." />
-      </Helmet>
-      <main className="mx-auto max-w-2xl px-6 py-14">
-        <a href="/" className="text-sm text-[#9a7337] hover:underline">{t.back}</a>
-        <h1 className="mt-6 font-serif text-4xl">{t.title}</h1>
-        <p className="mt-3 text-lg">{t.intro}</p>
+    <main className="mx-auto min-h-dvh w-full max-w-2xl px-6 py-14">
+      <a href="/" className="text-xs uppercase tracking-[0.25em] text-foreground/45 hover:text-foreground/70">
+        ← Tinglet
+      </a>
+      <h1 className="mt-2 font-serif text-3xl text-foreground">Support</h1>
+      <p className="mt-1 text-sm text-foreground/55">Support · Behöver du hjälp med Tinglet? Vi finns här.</p>
 
-        <section className="mt-10">
-          <h2 className="text-xl font-semibold">{t.howTitle}</h2>
-          <ul className="mt-3 list-disc space-y-2 pl-6">
-            {t.how.map((line) => (
-              <li key={`${id}-${line.slice(0, 8)}`}>{line}</li>
-            ))}
+      <div className="mt-10 space-y-8">
+        <Section title="Så fungerar appen">
+          <ul className="list-disc space-y-1 pl-5">
+            <li>Öppna Tinglet — en vacker handklocka visas.</li>
+            <li>Skaka telefonen så svingar klockan och ringer.</li>
+            <li>Du kan också trycka på klockan för att ringa.</li>
           </ul>
-        </section>
+        </Section>
 
-        <section className="mt-8">
-          <h2 className="text-xl font-semibold">{t.audioTitle}</h2>
-          <p className="mt-3">{t.audio}</p>
-        </section>
+        <Section title="Inget ljud?">
+          <p>
+            På iPhone slås ljudet på första gången du rör skärmen. Rör skärmen en gång var som helst, skaka
+            sedan telefonen — då ringer klockan.
+          </p>
+        </Section>
 
-        <section className="mt-8">
-          <h2 className="text-xl font-semibold">{t.premiumTitle}</h2>
-          <p className="mt-3">{t.premium}</p>
-        </section>
+        <Section title="Premium-upplåsning">
+          <p>
+            Tinglet Premium låser upp alla 70 klockor och alla bakgrunder med ett engångsköp. Har du bytt
+            telefon? Tryck på "Återställ köp" i appen så återställs ditt köp.
+          </p>
+        </Section>
 
-        <section className="mt-8">
-          <h2 className="text-xl font-semibold">{t.contactTitle}</h2>
-          <p className="mt-3">{t.contactText}</p>
-          <a href={`mailto:${t.email}`} className="mt-2 inline-block font-semibold text-[#9a7337] underline">{t.email}</a>
-        </section>
-      </main>
-    </div>
-  )
+        <Section title="Kontakta oss">
+          <p>Mejla oss så svarar vi inom ett par dagar:</p>
+          <p>
+            <a href="mailto:sirwanomar@hotmail.com" className="font-medium text-foreground underline">
+              sirwanomar@hotmail.com
+            </a>
+          </p>
+        </Section>
+
+        <Section title="How the app works (English)">
+          <ul className="list-disc space-y-1 pl-5">
+            <li>Open Tinglet — a beautiful hand bell appears.</li>
+            <li>Shake your phone and the bell swings and rings.</li>
+            <li>You can also tap the bell to ring it.</li>
+          </ul>
+          <p className="pt-2">
+            No sound? On iPhone, the first touch on the screen turns the sound on. Touch the screen once, then
+            shake — the bell will ring.
+          </p>
+          <p className="pt-2">
+            Tinglet Premium unlocks all 70 bells and every background with a single one-time purchase. On a new
+            phone, tap "Restore purchase" in the app.
+          </p>
+        </Section>
+      </div>
+    </main>
+  );
 }
