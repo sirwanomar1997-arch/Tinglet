@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as BackgroundsRouteImport } from './routes/backgrounds'
 import { Route as BellsRouteImport } from './routes/bells'
 import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as SupportRouteImport } from './routes/support'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -34,18 +35,25 @@ const PrivacyRoute = PrivacyRouteImport.update({
   path: '/privacy',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SupportRoute = SupportRouteImport.update({
+  id: '/support',
+  path: '/support',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/backgrounds': typeof BackgroundsRoute
   '/bells': typeof BellsRoute
   '/privacy': typeof PrivacyRoute
+  '/support': typeof SupportRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/backgrounds': typeof BackgroundsRoute
   '/bells': typeof BellsRoute
   '/privacy': typeof PrivacyRoute
+  '/support': typeof SupportRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -53,13 +61,14 @@ export interface FileRoutesById {
   '/backgrounds': typeof BackgroundsRoute
   '/bells': typeof BellsRoute
   '/privacy': typeof PrivacyRoute
+  '/support': typeof SupportRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/backgrounds' | '/bells' | '/privacy'
+  fullPaths: '/' | '/backgrounds' | '/bells' | '/privacy' | '/support'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/backgrounds' | '/bells' | '/privacy'
-  id: '__root__' | '/' | '/backgrounds' | '/bells' | '/privacy'
+  to: '/' | '/backgrounds' | '/bells' | '/privacy' | '/support'
+  id: '__root__' | '/' | '/backgrounds' | '/bells' | '/privacy' | '/support'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -67,6 +76,7 @@ export interface RootRouteChildren {
   BackgroundsRoute: typeof BackgroundsRoute
   BellsRoute: typeof BellsRoute
   PrivacyRoute: typeof PrivacyRoute
+  SupportRoute: typeof SupportRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -99,6 +109,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PrivacyRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/support': {
+      id: '/support'
+      path: '/support'
+      fullPath: '/support'
+      preLoaderRoute: typeof SupportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -107,6 +124,7 @@ const rootRouteChildren: RootRouteChildren = {
   BackgroundsRoute: BackgroundsRoute,
   BellsRoute: BellsRoute,
   PrivacyRoute: PrivacyRoute,
+  SupportRoute: SupportRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
